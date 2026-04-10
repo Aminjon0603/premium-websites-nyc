@@ -946,24 +946,42 @@ a {
 
 @media (max-width: 760px) {
   .container {
-    width: min(1240px, calc(100% - 22px));
+    width: min(1240px, calc(100% - 20px));
   }
 
   .hero-section {
-    padding-top: 24px;
+    padding-top: 20px;
+  }
+
+  .hero-layout,
+  .intro-layout,
+  .demos-layout,
+  .process-layout,
+  .reasons-layout,
+  .pricing-layout,
+  .split-detail-layout,
+  .contact-layout,
+  .contact-grid {
+    gap: 20px;
   }
 
   .section {
-    padding: 28px 0;
+    padding: 24px 0;
   }
 
   .section > .container {
-    padding-top: 24px;
+    padding-top: 20px;
   }
 
   .header-row {
-    gap: 14px;
-    padding: 14px 0;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px 0;
+    align-items: stretch;
+  }
+
+  .brand {
+    align-items: flex-start;
   }
 
   .brand-mark {
@@ -986,25 +1004,29 @@ a {
     width: 100%;
   }
 
+  .btn {
+    min-height: 52px;
+  }
+
   .hero-copy,
   .section-copy,
   .cta-copy,
   .detail-card,
   .contact-form,
   .contact-card {
-    gap: 16px;
+    gap: 14px;
   }
 
   .hero-copy h1 {
-    max-width: 10ch;
-    font-size: clamp(2.7rem, 11.4vw, 4.05rem);
-    line-height: 0.97;
+    max-width: 8.6ch;
+    font-size: clamp(2.45rem, 11vw, 3.45rem);
+    line-height: 0.99;
   }
 
   .section-copy h2,
   .cta-copy h2,
   .detail-card h2 {
-    font-size: clamp(1.82rem, 7.8vw, 2.45rem);
+    font-size: clamp(1.72rem, 7vw, 2.2rem);
     line-height: 1.02;
     max-width: 13ch;
   }
@@ -1032,9 +1054,35 @@ a {
   .demo-actions,
   .cta-actions {
     flex-direction: column;
+    gap: 10px;
   }
 
-  .preview-grid,
+  .trust-line {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .trust-line span {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .preview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .preview-card {
+    min-height: 132px;
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .preview-card strong {
+    max-width: none;
+    font-size: 1.02rem;
+  }
+
   .contact-strip,
   .demo-grid,
   .pricing-grid,
@@ -1042,6 +1090,19 @@ a {
   .reason-grid,
   .field-grid {
     grid-template-columns: 1fr;
+  }
+
+  .intro-content,
+  .intro-benefits,
+  .demo-grid,
+  .reason-grid,
+  .pricing-grid,
+  .detail-pill-grid,
+  .pricing-list,
+  .footer-links,
+  .contact-strip,
+  .direct-links {
+    gap: 12px;
   }
 
   .signal-card,
@@ -1054,16 +1115,90 @@ a {
   .contact-card,
   .contact-form,
   .cta-panel {
-    padding: 20px;
+    padding: 18px;
     border-radius: 22px;
+  }
+
+  .signal-card strong {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  .benefit-card strong,
+  .demo-card h3,
+  .process-card h3,
+  .reason-card h3,
+  .pricing-card h3,
+  .contact-card h3 {
+    font-size: 1.14rem;
+    line-height: 1.16;
+  }
+
+  .demo-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .demo-meta-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 12px 14px;
+  }
+
+  .demo-meta-label {
+    font-size: 0.88rem;
+  }
+
+  .demo-meta-value {
+    font-size: 0.93rem;
+  }
+
+  .pricing-price {
+    font-size: clamp(1.75rem, 8vw, 2.2rem);
   }
 
   .pricing-audience {
     min-height: 0;
   }
 
+  .pricing-list span,
+  .detail-pill-grid span {
+    min-height: 0;
+    padding: 10px 12px;
+    line-height: 1.4;
+    justify-content: flex-start;
+    white-space: normal;
+  }
+
+  .contact-link-value {
+    font-size: 0.96rem;
+  }
+
+  .contact-note {
+    font-size: 0.9rem;
+    padding: 11px 13px;
+  }
+
+  .field-grid {
+    gap: 12px;
+  }
+
+  .field input,
+  .field textarea,
+  .field select {
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .process-note {
+    margin-top: 2px;
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
   .footer-row {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .footer-links {
@@ -1072,6 +1207,7 @@ a {
 
   .mobile-bookbar {
     display: block;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
   }
 
   .site-footer {
@@ -1080,8 +1216,16 @@ a {
 }
 
 @media (max-width: 540px) {
+  .container {
+    width: min(1240px, calc(100% - 16px));
+  }
+
   .header-row {
     grid-template-columns: 1fr;
+  }
+
+  .brand {
+    gap: 12px;
   }
 
   .contact-strip a,
@@ -1089,12 +1233,13 @@ a {
     padding: 14px 16px;
   }
 
-  .demo-meta-row {
+  .preview-grid {
     grid-template-columns: 1fr;
-    gap: 8px;
   }
 
   .trust-line span,
+  .demo-kicker,
+  .demo-delivery,
   .pricing-list span,
   .detail-pill-grid span {
     width: 100%;
@@ -1103,13 +1248,22 @@ a {
 
   .hero-copy h1 {
     max-width: 10ch;
-    font-size: clamp(2.2rem, 10vw, 2.9rem);
+    font-size: clamp(2.08rem, 9.8vw, 2.7rem);
   }
 
   .section-copy h2,
   .cta-copy h2,
   .detail-card h2 {
-    font-size: clamp(1.48rem, 6.9vw, 1.92rem);
+    font-size: clamp(1.42rem, 6.7vw, 1.8rem);
+  }
+
+  .contact-link-value {
+    font-size: 0.92rem;
+  }
+
+  .field span,
+  .submit-hint {
+    font-size: 0.88rem;
   }
 }
 
