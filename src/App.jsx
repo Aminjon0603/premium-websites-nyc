@@ -414,7 +414,7 @@ function App() {
               <form className="contact-form" onSubmit={handleSubmit}>
                 <div className="field-grid">
                   <label className="field">
-                    <span>Business name</span>
+                    <span>Business Name</span>
                     <input
                       name="businessName"
                       value={formState.businessName}
@@ -424,7 +424,7 @@ function App() {
                   </label>
 
                   <label className="field">
-                    <span>Website type</span>
+                    <span>Website Type</span>
                     <input
                       name="websiteType"
                       value={formState.websiteType}
@@ -434,7 +434,7 @@ function App() {
                   </label>
 
                   <label className="field">
-                    <span>Current website</span>
+                    <span>Current Website</span>
                     <input
                       name="currentWebsite"
                       value={formState.currentWebsite}
@@ -444,7 +444,7 @@ function App() {
                   </label>
 
                   <label className="field">
-                    <span>Instagram or Facebook</span>
+                    <span>Instagram / Facebook</span>
                     <input
                       name="socialLink"
                       value={formState.socialLink}
@@ -453,7 +453,7 @@ function App() {
                     />
                   </label>
 
-                  <label className="field field-wide">
+                  <label className="field field-wide field-featured">
                     <span>Services</span>
                     <textarea
                       name="services"
@@ -465,7 +465,7 @@ function App() {
                   </label>
 
                   <label className="field">
-                    <span>Preferred package</span>
+                    <span>Preferred Package</span>
                     <select name="preferredPackage" value={formState.preferredPackage} onChange={updateField}>
                       <option value="">Select package</option>
                       {packages.map((pkg) => (
@@ -507,7 +507,7 @@ function App() {
                     />
                   </label>
 
-                  <label className="field field-wide">
+                  <label className="field field-wide field-featured">
                     <span>Notes</span>
                     <textarea
                       name="notes"
