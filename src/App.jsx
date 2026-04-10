@@ -55,7 +55,7 @@ function App() {
       `Business name: ${formState.businessName || "-"}`,
       `Website type: ${formState.websiteType || "-"}`,
       `Current website: ${formState.currentWebsite || "-"}`,
-      `Instagram or social link: ${formState.socialLink || "-"}`,
+      `Instagram or Facebook: ${formState.socialLink || "-"}`,
       `Services: ${formState.services || "-"}`,
       `Preferred package: ${formState.preferredPackage || "-"}`,
       `Timeline: ${formState.timeline || "-"}`,
@@ -444,12 +444,12 @@ function App() {
                   </label>
 
                   <label className="field">
-                    <span>Instagram or social link</span>
+                    <span>Instagram or Facebook</span>
                     <input
                       name="socialLink"
                       value={formState.socialLink}
                       onChange={updateField}
-                      placeholder="https://instagram.com/..."
+                      placeholder="https://instagram.com/ or facebook.com/..."
                     />
                   </label>
 
