@@ -1,6 +1,6 @@
-# Premium Websites NYC
+# Site by Amin
 
-Sales website for Aminjon Abrorov's premium website customization service for local businesses.
+Sales website for Site by Amin, a premium website customization service for local service businesses.
 
 ## What this project is
 
@@ -14,9 +14,12 @@ This is a React + Vite landing page used to sell customized premium website syst
 The site includes:
 
 - hero and value proposition
+- trust and proof section
 - live demo cards
 - process and pricing sections
-- contact form that opens a prefilled email draft
+- FAQ section
+- contact form with a Vercel function endpoint
+- custom OG preview for `sitebyamin.com`
 - Vercel-ready production setup
 
 ## Local development
@@ -25,6 +28,8 @@ The site includes:
 npm.cmd install
 npm.cmd run dev
 ```
+
+If you want to test the contact form function locally, use `vercel dev` instead of plain Vite dev.
 
 ## Production build
 
@@ -42,6 +47,19 @@ Suggested flow:
 2. Push this project to `main`
 3. Import the repository into Vercel
 4. Keep deploying future changes through `git push`
+
+## Contact form env vars
+
+Add these variables in Vercel before using the form in production:
+
+- `RESEND_API_KEY`
+- `CONTACT_FROM_EMAIL`
+- `CONTACT_TO_EMAIL` (optional, defaults to `amin2002abrorov@gmail.com`)
+
+Suggested setup:
+
+- `CONTACT_FROM_EMAIL`: a verified sender such as `Site by Amin <hello@sitebyamin.com>`
+- `CONTACT_TO_EMAIL`: `amin2002abrorov@gmail.com`
 
 ## Contact used on the site
 

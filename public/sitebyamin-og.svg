@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" fill="none" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="panel" x1="120" x2="1080" y1="70" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111722" />
+      <stop offset="1" stop-color="#0C1016" />
+    </linearGradient>
+    <linearGradient id="accent" x1="160" x2="1040" y1="140" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D7AF72" stop-opacity=".22" />
+      <stop offset=".55" stop-color="#9FE3CB" stop-opacity=".12" />
+      <stop offset="1" stop-color="#8FB4FF" stop-opacity=".16" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#F0DDC0" />
+      <stop offset="1" stop-color="#D7AF72" />
+    </linearGradient>
+    <filter id="shadow" width="1190" height="620" x="5" y="5" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+      <feOffset dy="20" />
+      <feGaussianBlur stdDeviation="28" />
+      <feComposite in2="hardAlpha" operator="out" />
+      <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.34 0" />
+      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_1_1" />
+      <feBlend in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0B0E13" />
+  <circle cx="166" cy="98" r="182" fill="#D7AF72" fill-opacity=".10" />
+  <circle cx="1030" cy="142" r="172" fill="#9FE3CB" fill-opacity=".10" />
+  <g filter="url(#shadow)">
+    <rect width="1080" height="510" x="60" y="60" fill="url(#panel)" rx="34" />
+    <rect width="1080" height="510" x="60" y="60" fill="url(#accent)" fill-opacity=".3" rx="34" />
+    <rect width="1080" height="510" x="60" y="60" stroke="#F4EFE7" stroke-opacity=".08" rx="34" />
+  </g>
+
+  <rect x="108" y="112" width="82" height="82" rx="24" fill="#0D1219" stroke="#D7AF72" stroke-opacity=".4" />
+  <rect x="118" y="122" width="62" height="62" rx="18" fill="url(#gold)" fill-opacity=".14" />
+  <text x="149" y="165" fill="#D7AF72" font-family="Sora, Inter, Arial, sans-serif" font-size="28" font-weight="800" letter-spacing="4" text-anchor="middle">SA</text>
+
+  <text x="220" y="136" fill="#D7AF72" font-family="Sora, Inter, Arial, sans-serif" font-size="22" font-weight="800" letter-spacing="4">SITE BY AMIN</text>
+  <text x="220" y="185" fill="#F4EFE7" font-family="Sora, Inter, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-4">
+    Premium websites
+  </text>
+  <text x="220" y="252" fill="#F4EFE7" font-family="Sora, Inter, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-4">
+    for local service
+  </text>
+  <text x="220" y="319" fill="#F4EFE7" font-family="Sora, Inter, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-4">
+    businesses
+  </text>
+
+  <text x="220" y="385" fill="#C9C2B8" font-family="Inter, Arial, sans-serif" font-size="29" font-weight="500">
+    Launched in days, not weeks.
+  </text>
+  <text x="220" y="424" fill="#C9C2B8" font-family="Inter, Arial, sans-serif" font-size="29" font-weight="500">
+    Customized for local businesses. Starting at $399.
+  </text>
+
+  <rect x="220" y="463" width="184" height="48" rx="24" fill="#161C26" stroke="#D7AF72" stroke-opacity=".16" />
+  <text x="312" y="494" fill="#F4EFE7" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle">4 live demos</text>
+  <rect x="420" y="463" width="210" height="48" rx="24" fill="#161C26" stroke="#9FE3CB" stroke-opacity=".16" />
+  <text x="525" y="494" fill="#F4EFE7" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle">3–5 day turnaround</text>
+  <rect x="646" y="463" width="184" height="48" rx="24" fill="#161C26" stroke="#8FB4FF" stroke-opacity=".16" />
+  <text x="738" y="494" fill="#F4EFE7" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" text-anchor="middle">Mobile-ready</text>
+
+  <g>
+    <rect x="830" y="114" width="236" height="92" rx="24" fill="#152028" stroke="#9FE3CB" stroke-opacity=".16" />
+    <text x="862" y="150" fill="#9FE3CB" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" letter-spacing="3">DENTAL</text>
+    <text x="862" y="183" fill="#F4EFE7" font-family="Sora, Inter, Arial, sans-serif" font-size="28" font-weight="700">Trust-first</text>
+  </g>
+  <g>
+    <rect x="830" y="222" width="236" height="92" rx="24" fill="#201811" stroke="#D7AF72" stroke-opacity=".16" />
+    <text x="862" y="258" fill="#D7AF72" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" letter-spacing="3">BARBER</text>
+    <text x="862" y="291" fill="#F4EFE7" font-family="Sora, Inter, Arial, sans-serif" font-size="28" font-weight="700">Sharp and bookable</text>
+  </g>
+  <g>
+    <rect x="830" y="330" width="236" height="92" rx="24" fill="#22171B" stroke="#D6B9A9" stroke-opacity=".16" />
+    <text x="862" y="366" fill="#D6B9A9" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" letter-spacing="3">SPA</text>
+    <text x="862" y="399" fill="#F4EFE7" font-family="Sora, Inter, Arial, sans-serif" font-size="28" font-weight="700">Elevated wellness</text>
+  </g>
+  <g>
+    <rect x="830" y="438" width="236" height="92" rx="24" fill="#161C29" stroke="#8FB4FF" stroke-opacity=".16" />
+    <text x="862" y="474" fill="#8FB4FF" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800" letter-spacing="3">EXPERTS</text>
+    <text x="862" y="507" fill="#F4EFE7" font-family="Sora, Inter, Arial, sans-serif" font-size="28" font-weight="700">Clear authority</text>
+  </g>
+</svg>

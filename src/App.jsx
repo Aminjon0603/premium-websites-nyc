@@ -1,5 +1,13 @@
-﻿import { useMemo, useState } from "react";
-import { addOns, demos, packages, reasons, steps } from "./siteContent";
+import { useMemo, useState } from "react";
+import {
+  addOns,
+  demos,
+  faqs,
+  packages,
+  proofItems,
+  reasons,
+  steps,
+} from "./siteContent";
 
 const initialFormState = {
   businessName: "",
@@ -16,6 +24,7 @@ const initialFormState = {
 
 function App() {
   const [formState, setFormState] = useState(initialFormState);
+  const [submitState, setSubmitState] = useState({ status: "idle", message: "" });
   const year = new Date().getFullYear();
   const whatsappNumber = "13323450632";
   const whatsappLink = `https://wa.me/${whatsappNumber}`;
@@ -24,16 +33,28 @@ function App() {
   const email = "amin2002abrorov@gmail.com";
 
   const submitHint = useMemo(() => {
-    if (!formState.websiteType && !formState.preferredPackage) {
-      return "Submitting opens an email draft with your project details.";
+    if (submitState.status === "loading") {
+      return "Sending your request to Site by Amin...";
     }
 
-    return "The email draft will include your selected website type and package.";
-  }, [formState.preferredPackage, formState.websiteType]);
+    if (submitState.status === "success" || submitState.status === "error") {
+      return submitState.message;
+    }
+
+    if (formState.websiteType || formState.preferredPackage) {
+      return "Your request is sent directly to Site by Amin. I reply by email or message, not by phone call.";
+    }
+
+    return "Send a few details and I will recommend the best website option for your business. Email or message works best.";
+  }, [formState.preferredPackage, formState.websiteType, submitState.message, submitState.status]);
 
   const updateField = ({ target }) => {
     const { name, value } = target;
     setFormState((current) => ({ ...current, [name]: value }));
+
+    if (submitState.status !== "idle") {
+      setSubmitState({ status: "idle", message: "" });
+    }
   };
 
   const jumpToContact = (websiteType = "", preferredPackage = "") => {
@@ -43,30 +64,49 @@ function App() {
       preferredPackage: preferredPackage || current.preferredPackage,
     }));
 
+    if (submitState.status !== "idle") {
+      setSubmitState({ status: "idle", message: "" });
+    }
+
     const contactSection = document.getElementById("contact");
     contactSection?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setSubmitState({ status: "loading", message: "" });
 
-    const subject = `Website request - ${formState.businessName || "New client inquiry"}`;
-    const body = [
-      `Business name: ${formState.businessName || "-"}`,
-      `Website type: ${formState.websiteType || "-"}`,
-      `Current website: ${formState.currentWebsite || "-"}`,
-      `Social Media: ${formState.socialLink || "-"}`,
-      `Services: ${formState.services || "-"}`,
-      `Preferred package: ${formState.preferredPackage || "-"}`,
-      `Timeline: ${formState.timeline || "-"}`,
-      `Email: ${formState.email || "-"}`,
-      `Phone: ${formState.phone || "-"}`,
-      "",
-      "Notes:",
-      formState.notes || "-",
-    ].join("\n");
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formState),
+      });
 
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(payload.error || "The form could not be sent right now. Please use email or message instead.");
+      }
+
+      setSubmitState({
+        status: "success",
+        message:
+          payload.message ||
+          "Thanks. Your request was sent successfully. I will reply by email or message as soon as I review it.",
+      });
+      setFormState(initialFormState);
+    } catch (error) {
+      setSubmitState({
+        status: "error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "The form could not be sent right now. Please use email or message instead.",
+      });
+    }
   };
 
   return (
@@ -76,11 +116,11 @@ function App() {
 
       <header className="site-header">
         <div className="container header-row">
-          <a className="brand" href="#top" aria-label="Aminjon Abrorov home">
-            <span className="brand-mark">AA</span>
+          <a className="brand" href="#top" aria-label="Site by Amin home">
+            <span className="brand-mark">SA</span>
             <span className="brand-copy">
-              <strong>Aminjon Abrorov</strong>
-              <small>Premium website customization for local service businesses</small>
+              <strong>Site by Amin</strong>
+              <small>Premium websites for local service businesses</small>
             </span>
           </a>
 
@@ -100,12 +140,12 @@ function App() {
         <section className="hero-section">
           <div className="container hero-layout">
             <div className="hero-copy">
-              <span className="eyebrow">Built for local service businesses</span>
-              <h1>Premium websites for NYC service businesses</h1>
+              <span className="eyebrow">Site by Amin</span>
+              <h1>Premium websites for local service businesses</h1>
               <p className="hero-text">
-                Launch a polished, high-converting website in days, not weeks. I customize
-                premium pre-built website systems for dental clinics, barbershops, spas, and
-                personal brands.
+                Choose a polished website system, get it customized to your brand, and launch in
+                days starting at $399. Built for dental clinics, barbershops, spas, coaches, and
+                personal brands that need to look trustworthy and ready to book.
               </p>
 
               <div className="hero-actions">
@@ -118,20 +158,21 @@ function App() {
               </div>
 
               <div className="trust-line">
+                <span>Starting at $399</span>
+                <span>4 live demos</span>
                 <span>Mobile-ready</span>
-                <span>Fast turnaround</span>
                 <span>Customized to your brand</span>
               </div>
             </div>
 
             <aside className="hero-panel">
               <div className="signal-card">
-                <span className="panel-label">Launch signal</span>
+                <span className="panel-label">What you get</span>
                 <strong>Launched in days, not weeks</strong>
                 <p>
-                  Strong website systems already exist. The value is customizing them to your
-                  brand, services, and contact flow so you can launch faster without sacrificing
-                  quality.
+                  These are premium website systems with strong structure already in place. I
+                  customize the branding, content, services, and contact flow so your site feels
+                  built for your business instead of looking like a generic template.
                 </p>
               </div>
 
@@ -172,6 +213,30 @@ function App() {
           </div>
         </section>
 
+        <section className="section section-proof">
+          <div className="container proof-layout">
+            <div className="section-copy">
+              <span className="eyebrow">Proof and trust</span>
+              <h2>Built from live demos and launch-ready systems</h2>
+              <p>
+                This is not a vague promise of custom design sometime later. The concepts are
+                already live, mobile-ready, and structured to help local service businesses look
+                polished fast.
+              </p>
+            </div>
+
+            <div className="proof-grid">
+              {proofItems.map((item) => (
+                <article className="proof-card" key={item.title}>
+                  <span className="proof-label">{item.label}</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="section">
           <div className="container intro-layout">
             <div className="section-copy">
@@ -186,7 +251,7 @@ function App() {
               </p>
               <p>
                 I use high-end pre-built website frameworks and customize them to fit your
-                business, brand, services, and contact flow — so you can launch faster without
+                business, brand, services, and contact flow so you can launch faster without
                 sacrificing quality.
               </p>
               <p>
@@ -204,7 +269,10 @@ function App() {
               <article className="benefit-card">
                 <span className="mini-label">Clarity</span>
                 <strong>Proven layout systems</strong>
-                <p>These structures are already built around clarity, trust, and conversion-friendly structure.</p>
+                <p>
+                  These structures are already built around clarity, trust, and conversion-friendly
+                  structure.
+                </p>
               </article>
               <article className="benefit-card">
                 <span className="mini-label">Fit</span>
@@ -233,6 +301,18 @@ function App() {
                     <span className="demo-kicker">{demo.kicker}</span>
                     <span className="demo-delivery">{demo.delivery}</span>
                   </div>
+
+                  <a
+                    className="demo-shot"
+                    href={demo.demoUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${demo.title}`}
+                  >
+                    <img src={demo.previewImage} alt={demo.previewAlt} loading="lazy" />
+                    <span className="demo-shot-badge">Live preview</span>
+                  </a>
+
                   <h3>{demo.title}</h3>
                   <p>{demo.text}</p>
                   <div className="demo-meta">
@@ -251,7 +331,7 @@ function App() {
                   </div>
                   <div className="demo-actions">
                     <a className="btn btn-secondary" href={demo.demoUrl} target="_blank" rel="noreferrer">
-                      View Demo
+                      View Live Demo
                     </a>
                     <button
                       type="button"
@@ -359,7 +439,7 @@ function App() {
             </article>
 
             <article className="detail-card detail-card-contrast">
-              <span className="eyebrow eyebrow-contrast">About</span>
+              <span className="eyebrow eyebrow-contrast">About Site by Amin</span>
               <h2>Built for businesses that want to look premium without moving slowly</h2>
               <p>
                 I help local service businesses launch premium websites using high-end pre-built
@@ -367,7 +447,7 @@ function App() {
               </p>
               <p>
                 This approach works especially well for businesses that need a professional online
-                presence fast — without dragging through a long custom design process.
+                presence fast without dragging through a long custom design process.
               </p>
               <p>
                 Whether you&apos;re a dental clinic, spa, barbershop, tutor, or personal brand,
@@ -400,6 +480,27 @@ function App() {
           </div>
         </section>
 
+        <section className="section section-faq">
+          <div className="container faq-layout">
+            <div className="section-copy">
+              <span className="eyebrow">FAQ</span>
+              <h2>Questions clients usually ask before getting started</h2>
+              <p>
+                A few fast answers about timelines, content, revisions, and how the process works.
+              </p>
+            </div>
+
+            <div className="faq-grid">
+              {faqs.map((item) => (
+                <article className="faq-card" key={item.question}>
+                  <h3>{item.question}</h3>
+                  <p>{item.answer}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="section" id="contact">
           <div className="container contact-layout">
             <div className="section-copy">
@@ -420,6 +521,7 @@ function App() {
                       value={formState.businessName}
                       onChange={updateField}
                       placeholder="Your business name"
+                      required
                     />
                   </label>
 
@@ -430,6 +532,7 @@ function App() {
                       value={formState.websiteType}
                       onChange={updateField}
                       placeholder="Dental, spa, barber, coach..."
+                      required
                     />
                   </label>
 
@@ -449,7 +552,7 @@ function App() {
                       name="socialLink"
                       value={formState.socialLink}
                       onChange={updateField}
-                      placeholder="https://instagram.com/..."
+                      placeholder="Instagram, Facebook, or another profile"
                     />
                   </label>
 
@@ -494,6 +597,7 @@ function App() {
                       value={formState.email}
                       onChange={updateField}
                       placeholder="you@example.com"
+                      required
                     />
                   </label>
 
@@ -519,10 +623,10 @@ function App() {
                   </label>
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-full">
-                  Request My Website
+                <button type="submit" className="btn btn-primary btn-full" disabled={submitState.status === "loading"}>
+                  {submitState.status === "loading" ? "Sending..." : "Request My Website"}
                 </button>
-                <small className="submit-hint">{submitHint}</small>
+                <small className={`submit-hint submit-${submitState.status}`}>{submitHint}</small>
               </form>
 
               <aside className="contact-card">
@@ -558,8 +662,8 @@ function App() {
       <footer className="site-footer">
         <div className="container footer-row">
           <div className="footer-bio">
-            Premium website customization for local service businesses. Fast, polished, and built
-            to help you launch with confidence.
+            Site by Amin builds premium websites for local service businesses. Fast, polished, and
+            designed to help you launch with confidence.
           </div>
           <div className="footer-links">
             <a href="#demos">View Demos</a>
@@ -569,7 +673,7 @@ function App() {
               Send a Message
             </a>
           </div>
-          <div className="footer-meta">&copy; {year} Aminjon Abrorov</div>
+          <div className="footer-meta">&copy; {year} Site by Amin</div>
         </div>
       </footer>
 

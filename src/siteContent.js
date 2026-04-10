@@ -5,11 +5,13 @@
     title: "Website for Dental Clinics",
     text: "Designed for private dental practices, cosmetic dentistry, orthodontics, and premium clinics that want a trustworthy and modern online presence.",
     bestFor: "Private practices, cosmetic dentists, orthodontists",
-    includes: "Homepage, services, testimonials, contact/booking flow",
+    includes: "Homepage, services, testimonials, contact and booking flow",
     delivery: "Customized in 3–5 days",
     demoUrl: "https://premium-dental-clinic-demo.vercel.app",
     formType: "Website for Dental Clinics",
     theme: "theme-dental",
+    previewImage: "/previews/dental-demo-preview.png",
+    previewAlt: "Preview of the premium dental clinic demo website",
   },
   {
     id: "barber",
@@ -22,6 +24,8 @@
     demoUrl: "https://premium-barbershop-demo.vercel.app",
     formType: "Website for Premium Barbershops",
     theme: "theme-barber",
+    previewImage: "/previews/barbershop-demo-preview.png",
+    previewAlt: "Preview of the premium barbershop demo website",
   },
   {
     id: "spa",
@@ -29,11 +33,13 @@
     title: "Website for Spa & Wellness Brands",
     text: "A luxury-inspired website concept for spa, beauty, med spa, and wellness businesses that need a more elevated online presence.",
     bestFor: "Spas, med spas, beauty studios, wellness spaces",
-    includes: "Service highlights, brand story, testimonials, contact/booking CTA",
+    includes: "Service highlights, brand story, testimonials, contact and booking CTA",
     delivery: "Customized in 3–5 days",
     demoUrl: "https://luxury-spa-demo.vercel.app",
     formType: "Website for Spa & Wellness Brands",
     theme: "theme-spa",
+    previewImage: "/previews/spa-demo-preview.png",
+    previewAlt: "Preview of the luxury spa demo website",
   },
   {
     id: "expert",
@@ -46,6 +52,31 @@
     demoUrl: "https://chesswithamin.vercel.app",
     formType: "Website for Coaches, Tutors & Experts",
     theme: "theme-expert",
+    previewImage: "/previews/expert-demo-preview.png",
+    previewAlt: "Preview of the coach and tutor expert demo website",
+  },
+];
+
+export const proofItems = [
+  {
+    label: "4 live demos",
+    title: "Real websites, not empty promises",
+    text: "You can open the dental, barbershop, spa, and expert demos right now and judge the product quality before you ever message me.",
+  },
+  {
+    label: "3–5 days",
+    title: "Typical customization window",
+    text: "Once your content is ready, most projects can be customized and launch-ready within a few business days.",
+  },
+  {
+    label: "Mobile-ready",
+    title: "Responsive from the start",
+    text: "Each website system is already built to look polished on phone, tablet, and desktop without a separate redesign pass.",
+  },
+  {
+    label: "Message-first",
+    title: "Direct support",
+    text: "Questions, revisions, and launch notes are handled by email, WhatsApp, or Telegram. No bloated process and no phone tag.",
   },
 ];
 
@@ -110,7 +141,7 @@ export const packages = [
     included: [
       "Everything in Starter",
       "Additional custom sections",
-      "Booking/contact flow setup",
+      "Booking and contact flow setup",
       "Basic SEO setup",
       "Social media integration",
       "Analytics setup",
@@ -145,4 +176,32 @@ export const addOns = [
   "Ongoing edits and support",
   "Multi-location sections",
   "Additional language version",
+];
+
+export const faqs = [
+  {
+    question: "How fast can my website launch?",
+    answer:
+      "Most projects launch in 3 to 5 days once I have your logo, copy, services, contact details, and any images you want to use.",
+  },
+  {
+    question: "What do I need to send you?",
+    answer:
+      "The usual checklist is simple: logo, business name, services, pricing if you want it shown, contact details, social links, and any reference sites or photos.",
+  },
+  {
+    question: "How much can be customized?",
+    answer:
+      "Colors, typography balance, layout sections, copy, contact flow, buttons, and business-specific content all get adapted to your brand and goals.",
+  },
+  {
+    question: "Does this include mobile and basic launch setup?",
+    answer:
+      "Yes. These website systems are already built to be mobile-ready, and the launch packages include the setup needed to get your site online cleanly.",
+  },
+  {
+    question: "How do revisions work?",
+    answer:
+      "You start from a strong structure, so revisions stay focused. That usually means faster approvals and fewer rounds than a full custom build from scratch.",
+  },
 ];

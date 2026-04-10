@@ -1,7 +1,18 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="none" viewBox="0 0 64 64">
   <rect width="64" height="64" rx="20" fill="#0B0E13" />
   <rect x="10" y="10" width="44" height="44" rx="16" fill="url(#a)" fill-opacity="0.16" stroke="#D7AF72" stroke-opacity="0.4" />
-  <path fill="#F4EFE7" d="M21.826 43 31.8 19h2.608l9.936 24h-3.077l-2.555-6.295H27.42L24.9 43h-3.074Zm6.655-8.693h9.17L33.08 22.965l-4.598 11.342Zm9.982 8.693 8.746-24h3.072l-8.745 24h-3.073Z" />
+  <text
+    x="32"
+    y="39"
+    fill="#F4EFE7"
+    font-family="Sora, Arial, sans-serif"
+    font-size="21"
+    font-weight="800"
+    letter-spacing="1.8"
+    text-anchor="middle"
+  >
+    SA
+  </text>
   <defs>
     <linearGradient id="a" x1="12" x2="51" y1="12" y2="52" gradientUnits="userSpaceOnUse">
       <stop stop-color="#D7AF72" />
