@@ -837,15 +837,6 @@ a {
 }
 
 .field span {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.35rem;
-  width: fit-content;
-  max-width: 100%;
-  padding: 0 12px;
-  border: 1px solid rgba(244, 239, 231, 0.08);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
   font-family: var(--display);
   font-size: 0.78rem;
   font-weight: 700;
@@ -1128,8 +1119,6 @@ a {
   }
 
   .field span {
-    min-height: 2.1rem;
-    padding: 0 10px;
     font-size: 0.68rem;
     letter-spacing: 0.08em;
   }
@@ -1350,7 +1339,6 @@ a {
   }
 
   .field span {
-    min-height: 2rem;
     font-size: 0.66rem;
   }
 

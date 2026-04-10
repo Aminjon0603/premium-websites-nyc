@@ -414,7 +414,7 @@ function App() {
               <form className="contact-form" onSubmit={handleSubmit}>
                 <div className="field-grid">
                   <label className="field">
-                    <span>Business Name</span>
+                    <span>Business name</span>
                     <input
                       name="businessName"
                       value={formState.businessName}
@@ -424,7 +424,7 @@ function App() {
                   </label>
 
                   <label className="field">
-                    <span>Website Type</span>
+                    <span>Website type</span>
                     <input
                       name="websiteType"
                       value={formState.websiteType}
@@ -434,7 +434,7 @@ function App() {
                   </label>
 
                   <label className="field">
-                    <span>Current Website</span>
+                    <span>Current website</span>
                     <input
                       name="currentWebsite"
                       value={formState.currentWebsite}
@@ -444,12 +444,12 @@ function App() {
                   </label>
 
                   <label className="field">
-                    <span>Social Media</span>
+                    <span>Social media</span>
                     <input
                       name="socialLink"
                       value={formState.socialLink}
                       onChange={updateField}
-                      placeholder="https://instagram.com/ or another profile"
+                      placeholder="https://instagram.com/..."
                     />
                   </label>
 
@@ -465,7 +465,7 @@ function App() {
                   </label>
 
                   <label className="field">
-                    <span>Preferred Package</span>
+                    <span>Preferred package</span>
                     <select name="preferredPackage" value={formState.preferredPackage} onChange={updateField}>
                       <option value="">Select package</option>
                       {packages.map((pkg) => (
