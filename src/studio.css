@@ -832,10 +832,6 @@ a {
   gap: 11px;
 }
 
-.field-featured {
-  align-content: start;
-}
-
 .field-wide {
   grid-column: 1 / -1;
 }
@@ -1275,23 +1271,6 @@ a {
     gap: 12px;
   }
 
-  .field-featured {
-    padding: 14px;
-    border: 1px solid rgba(244, 239, 231, 0.08);
-    border-radius: 22px;
-    background:
-      radial-gradient(circle at top right, rgba(159, 227, 203, 0.06), transparent 28%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.018)),
-      rgba(13, 18, 25, 0.92);
-  }
-
-  .field-featured textarea {
-    min-height: 156px;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.024)),
-      rgba(18, 24, 33, 0.94);
-  }
-
   .field input,
   .field textarea,
   .field select {
@@ -1368,15 +1347,6 @@ a {
 
   .contact-link-value {
     font-size: 0.92rem;
-  }
-
-  .field-featured {
-    padding: 12px;
-    border-radius: 20px;
-  }
-
-  .field-featured textarea {
-    min-height: 144px;
   }
 
   .field span {
