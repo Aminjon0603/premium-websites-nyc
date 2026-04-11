@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   addOns,
   demos,
@@ -25,6 +25,8 @@ const initialFormState = {
 function App() {
   const [formState, setFormState] = useState(initialFormState);
   const [submitState, setSubmitState] = useState({ status: "idle", message: "" });
+  const [showMobileBookbar, setShowMobileBookbar] = useState(false);
+  const heroActionsRef = useRef(null);
   const year = new Date().getFullYear();
   const whatsappNumber = "13323450632";
   const whatsappLink = `https://wa.me/${whatsappNumber}`;
@@ -109,6 +111,65 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    const heroActions = heroActionsRef.current;
+
+    if (!heroActions) {
+      return undefined;
+    }
+
+    const mediaQuery = window.matchMedia("(max-width: 760px)");
+    let observer;
+    let removeFallback = () => {};
+
+    const handleVisibilityMode = () => {
+      if (!mediaQuery.matches) {
+        setShowMobileBookbar(false);
+        return;
+      }
+
+      if ("IntersectionObserver" in window) {
+        observer?.disconnect();
+        observer = new IntersectionObserver(
+          ([entry]) => {
+            setShowMobileBookbar(!entry.isIntersecting);
+          },
+          {
+            threshold: 0.35,
+            rootMargin: "0px 0px -84px 0px",
+          }
+        );
+
+        observer.observe(heroActions);
+        return;
+      }
+
+      const fallbackScroll = () => {
+        setShowMobileBookbar(window.scrollY > 420);
+      };
+
+      fallbackScroll();
+      window.addEventListener("scroll", fallbackScroll, { passive: true });
+      removeFallback = () => window.removeEventListener("scroll", fallbackScroll);
+    };
+
+    handleVisibilityMode();
+
+    const handleMediaChange = () => {
+      removeFallback();
+      observer?.disconnect();
+      handleVisibilityMode();
+    };
+
+    mediaQuery.addEventListener("change", handleMediaChange);
+
+    return () => {
+      removeFallback();
+      observer?.disconnect();
+      mediaQuery.removeEventListener("change", handleMediaChange);
+    };
+  }, []);
+
   return (
     <div className="sales-page">
       <div className="ambient ambient-one" />
@@ -148,7 +209,7 @@ function App() {
                 personal brands that need to look trustworthy and ready to book.
               </p>
 
-              <div className="hero-actions">
+              <div className="hero-actions" ref={heroActionsRef}>
                 <a className="btn btn-secondary" href="#demos">
                   View Live Demos
                 </a>
@@ -677,7 +738,7 @@ function App() {
         </div>
       </footer>
 
-      <div className="mobile-bookbar">
+      <div className={`mobile-bookbar ${showMobileBookbar ? "is-visible" : ""}`}>
         <a className="btn btn-primary" href="#contact">
           Get Your Version
         </a>

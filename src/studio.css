@@ -1095,6 +1095,18 @@ a {
   padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
   background: linear-gradient(180deg, rgba(11, 14, 19, 0), rgba(11, 14, 19, 0.96) 34%);
   backdrop-filter: blur(12px);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(18px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.mobile-bookbar.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 @media (max-width: 1180px) {
