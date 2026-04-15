@@ -112,9 +112,10 @@ export default {
       );
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
-    const fromEmail = process.env.CONTACT_FROM_EMAIL;
-    const toEmail = process.env.CONTACT_TO_EMAIL || fallbackRecipient;
+    const env = globalThis.process?.env ?? {};
+    const apiKey = env.RESEND_API_KEY;
+    const fromEmail = env.CONTACT_FROM_EMAIL;
+    const toEmail = env.CONTACT_TO_EMAIL || fallbackRecipient;
 
     if (!apiKey || !fromEmail) {
       return Response.json(

@@ -29,6 +29,12 @@ html {
   scroll-behavior: smooth;
 }
 
+#demos,
+#pricing,
+#contact {
+  scroll-margin-top: 108px;
+}
+
 body,
 #root {
   margin: 0;
@@ -1162,6 +1168,12 @@ a {
 @media (max-width: 760px) {
   .container {
     width: min(1240px, calc(100% - 20px));
+  }
+
+  #demos,
+  #pricing,
+  #contact {
+    scroll-margin-top: 92px;
   }
 
   .hero-section {

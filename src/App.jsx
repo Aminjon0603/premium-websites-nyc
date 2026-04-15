@@ -573,12 +573,17 @@ function App() {
             </div>
 
             <div className="contact-grid">
-              <form className="contact-form" onSubmit={handleSubmit}>
+              <form
+                className="contact-form"
+                onSubmit={handleSubmit}
+                aria-busy={submitState.status === "loading"}
+              >
                 <div className="field-grid">
                   <label className="field">
                     <span>Business name</span>
                     <input
                       name="businessName"
+                      autoComplete="organization"
                       value={formState.businessName}
                       onChange={updateField}
                       placeholder="Your business name"
@@ -601,6 +606,9 @@ function App() {
                     <span>Current website</span>
                     <input
                       name="currentWebsite"
+                      type="url"
+                      autoComplete="url"
+                      inputMode="url"
                       value={formState.currentWebsite}
                       onChange={updateField}
                       placeholder="https://yourwebsite.com"
@@ -655,6 +663,8 @@ function App() {
                     <input
                       name="email"
                       type="email"
+                      autoComplete="email"
+                      inputMode="email"
                       value={formState.email}
                       onChange={updateField}
                       placeholder="you@example.com"
@@ -666,6 +676,9 @@ function App() {
                     <span>Phone</span>
                     <input
                       name="phone"
+                      type="tel"
+                      autoComplete="tel"
+                      inputMode="tel"
                       value={formState.phone}
                       onChange={updateField}
                       placeholder="+1 ..."
@@ -687,7 +700,13 @@ function App() {
                 <button type="submit" className="btn btn-primary btn-full" disabled={submitState.status === "loading"}>
                   {submitState.status === "loading" ? "Sending..." : "Request My Website"}
                 </button>
-                <small className={`submit-hint submit-${submitState.status}`}>{submitHint}</small>
+                <small
+                  className={`submit-hint submit-${submitState.status}`}
+                  role={submitState.status === "error" ? "alert" : "status"}
+                  aria-live="polite"
+                >
+                  {submitHint}
+                </small>
               </form>
 
               <aside className="contact-card">
