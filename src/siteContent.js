@@ -21,11 +21,11 @@
     bestFor: "Barbershops, grooming studios, men's care brands",
     includes: "Services, team section, pricing, contact info, booking CTA",
     delivery: "Customized in 3–5 days",
-    demoUrl: "https://premium-barbershop-demo.vercel.app",
+    demoUrl: "https://mq-barber-shop.vercel.app",
     formType: "Website for Premium Barbershops",
     theme: "theme-barber",
     previewImage: "/previews/barbershop-demo-preview.png",
-    previewAlt: "Preview of the premium barbershop demo website",
+    previewAlt: "Preview of the MQ Barber Shop live website",
   },
   {
     id: "spa",
