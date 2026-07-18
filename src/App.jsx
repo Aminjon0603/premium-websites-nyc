@@ -216,8 +216,8 @@ function App() {
                 <span className="eyebrow">Site by Amin</span>
                 <h1 id="hero-title">Websites That Help Local Businesses Get More Customers</h1>
                 <p className="hero-text">
-                  Fast, custom websites for barbershops, salons, dentists, restaurants, spas, and
-                  other local businesses that need more trust, calls, and bookings.
+                  Custom websites for local businesses that need more calls and bookings — live in
+                  3-5 days.
                 </p>
 
                 <div className="hero-actions" ref={heroActionsRef}>
@@ -297,10 +297,6 @@ function App() {
               <div className="section-copy">
                 <span className="eyebrow">Why Choose SiteByAmin</span>
                 <h2 id="why-title">Why local businesses choose SiteByAmin.</h2>
-                <p>
-                  Every section answers three things fast: what you do, why trust you, and how to
-                  contact you.
-                </p>
               </div>
 
               <div className="proof-grid trust-grid">
@@ -312,11 +308,6 @@ function App() {
                   </article>
                 ))}
               </div>
-
-              <SectionCta
-                text="Need a site that feels credible in seconds?"
-                buttonLabel="Message Me About This"
-              />
             </div>
           </section>
 
@@ -325,9 +316,6 @@ function App() {
               <div className="section-copy">
                 <span className="eyebrow">How It Works</span>
                 <h2 id="process-title">A simple process from first message to launch.</h2>
-                <p>
-                  No long handoff. No confusion. Just a clear path to go live.
-                </p>
               </div>
 
               <div className="step-grid timeline-grid">
@@ -339,13 +327,6 @@ function App() {
                   </article>
                 ))}
               </div>
-
-              <SectionCta
-                className="section-cta-inline"
-                text="Clear steps. Clear pricing. Fast launch."
-                buttonLabel="See Pricing"
-                href="#pricing"
-              />
             </div>
           </section>
 
@@ -354,12 +335,8 @@ function App() {
               <div className="section-copy section-copy-wide">
                 <span className="eyebrow">Portfolio</span>
                 <h2 id="portfolio-title">Live website demos built for real businesses.</h2>
-                <p>
-                  Pick the direction that fits your business. I customize it around your services,
-                  brand, and goals.
-                </p>
                 <p className="section-microcopy">
-                  Different industry? The same system can be adapted to fit it.
+                  Pick a direction, and I&rsquo;ll customize it around your business.
                 </p>
               </div>
 
@@ -427,7 +404,6 @@ function App() {
               <div className="section-copy section-copy-wide">
                 <span className="eyebrow">Pricing</span>
                 <h2 id="pricing-title">Simple pricing for a faster launch.</h2>
-                <p>Choose the package that fits your business.</p>
                 <p className="section-microcopy">
                   One-time pricing. Hosting and extra scope can be added if needed.
                 </p>
@@ -518,11 +494,6 @@ function App() {
                     </article>
                   ))}
                 </div>
-
-                <SectionCta
-                  text="Strong proof makes the next click easier."
-                  buttonLabel="Message Me About This"
-                />
               </div>
             </section>
           ) : null}
@@ -574,11 +545,6 @@ function App() {
                   </details>
                 ))}
               </div>
-
-              <SectionCta
-                text="Ready when the process feels clear?"
-                buttonLabel="Start Your Project"
-              />
             </div>
           </section>
 

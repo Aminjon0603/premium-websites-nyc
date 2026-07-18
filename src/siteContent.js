@@ -74,21 +74,11 @@ export const trustItems = [
   },
   {
     icon: "03",
-    title: "Modern custom design",
-    text: "Tailored to your business, not dropped into a generic template.",
-  },
-  {
-    icon: "04",
-    title: "NYC focused",
-    text: "Made for local businesses competing in a crowded market.",
-  },
-  {
-    icon: "05",
     title: "Starting at $399",
     text: "A clean launch price for businesses that need to move now.",
   },
   {
-    icon: "06",
+    icon: "04",
     title: "Ongoing support available",
     text: "Updates and support stay available after launch.",
   },
