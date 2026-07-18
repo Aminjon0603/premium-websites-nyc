@@ -1,128 +1,132 @@
-﻿export const demos = [
+export const demos = [
   {
     id: "dental",
-    kicker: "Dental clinics",
-    title: "Website for Dental Clinics",
-    text: "Designed for private dental practices, cosmetic dentistry, orthodontics, and premium clinics that want a trustworthy and modern online presence.",
-    bestFor: "Private practices, cosmetic dentists, orthodontists",
-    includes: "Homepage, services, testimonials, contact and booking flow",
-    delivery: "Customized in 3–5 days",
-    demoUrl: "https://premium-dental-clinic-demo.vercel.app",
-    formType: "Website for Dental Clinics",
+    category: "Salon",
+    kicker: "Salons",
+    title: "Salon website built for bookings",
+    text: "Online booking. Clear services. Mobile-first layout.",
+    bestFor: "Salons, stylists, beauty studios",
+    includes: "Services, team, contact, booking CTA",
+    delivery: "Customized in 3-5 days",
+    demoUrl: "https://simple-everyday-salon.vercel.app/",
+    formType: "Salon website",
     theme: "theme-dental",
     previewImage: "/previews/dental-demo-preview.png",
-    previewAlt: "Preview of the premium dental clinic demo website",
+    previewAlt: "Preview card for the salon website demo",
   },
   {
     id: "barber",
+    category: "Barbershop",
     kicker: "Barbershops",
-    title: "Website for Premium Barbershops",
-    text: "A strong visual website concept for barber studios and grooming brands that want to look sharp, modern, and easy to book.",
+    title: "Barbershop site built for appointments",
+    text: "Sharp branding. Clear pricing. Fast booking path.",
     bestFor: "Barbershops, grooming studios, men's care brands",
-    includes: "Services, team section, pricing, contact info, booking CTA",
-    delivery: "Customized in 3–5 days",
+    includes: "Services, team, pricing, proof, booking CTA",
+    delivery: "Customized in 3-5 days",
     demoUrl: "https://mq-barber-shop.vercel.app",
-    formType: "Website for Premium Barbershops",
+    formType: "Barbershop website",
     theme: "theme-barber",
     previewImage: "/previews/barbershop-demo-preview.png",
-    previewAlt: "Preview of the MQ Barber Shop live website",
+    previewAlt: "Preview card for the barbershop website demo",
   },
   {
     id: "spa",
+    category: "Spa & Wellness",
     kicker: "Wellness",
-    title: "Website for Spa & Wellness Brands",
-    text: "A luxury-inspired website concept for spa, beauty, med spa, and wellness businesses that need a more elevated online presence.",
-    bestFor: "Spas, med spas, beauty studios, wellness spaces",
-    includes: "Service highlights, brand story, testimonials, contact and booking CTA",
-    delivery: "Customized in 3–5 days",
+    title: "Spa website with a premium first impression",
+    text: "Service highlights. Trust sections. Easy inquiry flow.",
+    bestFor: "Spas, med spas, beauty studios, wellness brands",
+    includes: "Service highlights, story, proof, inquiry CTA",
+    delivery: "Customized in 3-5 days",
     demoUrl: "https://luxury-spa-demo.vercel.app",
-    formType: "Website for Spa & Wellness Brands",
+    formType: "Spa and wellness website",
     theme: "theme-spa",
     previewImage: "/previews/spa-demo-preview.png",
-    previewAlt: "Preview of the luxury spa demo website",
+    previewAlt: "Preview card for the luxury spa website demo",
   },
   {
     id: "expert",
-    kicker: "Personal brands",
-    title: "Website for Coaches, Tutors & Experts",
-    text: "A clean, personal-brand-focused website for instructors, consultants, tutors, and service professionals who want to present themselves with more clarity and authority.",
-    bestFor: "Tutors, coaches, consultants, instructors, experts",
-    includes: "About section, services, testimonials, contact form, call-to-action",
-    delivery: "Customized in 3–5 days",
-    demoUrl: "https://chesswithamin.vercel.app",
-    formType: "Website for Coaches, Tutors & Experts",
+    category: "Programs & Camps",
+    kicker: "Education",
+    title: "Program website with clear registration",
+    text: "Program details. Parent trust. Strong call to register.",
+    bestFor: "Camps, classes, after-school programs, instructors",
+    includes: "Program highlights, proof, registration flow, CTA",
+    delivery: "Customized in 3-5 days",
+    demoUrl: "https://www.chessandtruck.com/",
+    formType: "Program or camp website",
     theme: "theme-expert",
     previewImage: "/previews/expert-demo-preview.png",
-    previewAlt: "Preview of the coach and tutor expert demo website",
+    previewAlt: "Preview card for the Chess and Truck website demo",
   },
 ];
 
-export const proofItems = [
+export const trustItems = [
   {
-    label: "4 live demos",
-    title: "Real websites, not empty promises",
-    text: "You can open the dental, barbershop, spa, and expert demos right now and judge the product quality before you ever message me.",
+    icon: "01",
+    title: "Fast turnaround",
+    text: "Most sites are ready for review in 3-5 business days.",
   },
   {
-    label: "3–5 days",
-    title: "Typical customization window",
-    text: "Once your content is ready, most projects can be customized and launch-ready within a few business days.",
+    icon: "02",
+    title: "Mobile-first",
+    text: "Built for the phone screen first, then desktop.",
   },
   {
-    label: "Mobile-ready",
-    title: "Responsive from the start",
-    text: "Each website system is already built to look polished on phone, tablet, and desktop without a separate redesign pass.",
+    icon: "03",
+    title: "Modern custom design",
+    text: "Tailored to your business, not dropped into a generic template.",
   },
   {
-    label: "Message-first",
-    title: "Direct support",
-    text: "Questions, revisions, and launch notes are handled by email, WhatsApp, or Telegram. No bloated process and no phone tag.",
+    icon: "04",
+    title: "NYC focused",
+    text: "Made for local businesses competing in a crowded market.",
+  },
+  {
+    icon: "05",
+    title: "Starting at $399",
+    text: "A clean launch price for businesses that need to move now.",
+  },
+  {
+    icon: "06",
+    title: "Ongoing support available",
+    text: "Updates and support stay available after launch.",
   },
 ];
 
 export const steps = [
   {
-    step: "Step 1",
-    title: "Choose a website style",
-    text: "Pick the demo that best fits your business and goals.",
+    step: "1",
+    title: "Tell me about your business",
+    text: "Send your services, goals, and the style you want.",
   },
   {
-    step: "Step 2",
-    title: "Send your content",
-    text: "Share your logo, photos, services, contact details, social links, and any existing website references.",
+    step: "2",
+    title: "Start with the $149 deposit",
+    text: "Your spot is reserved and work starts right away.",
   },
   {
-    step: "Step 3",
-    title: "I customize and launch it",
-    text: "I adapt the design to your brand and publish a polished version ready to use.",
-  },
-];
-
-export const reasons = [
-  {
-    title: "Faster launch",
-    text: "A full custom process can take weeks. This approach gets your website live much sooner.",
+    step: "3",
+    title: "I build your website",
+    text: "I customize the layout, copy, and contact flow.",
   },
   {
-    title: "Lower cost",
-    text: "You get a premium look and strong structure without paying for a long ground-up process.",
+    step: "4",
+    title: "Review and revisions",
+    text: "You send edits. I refine the details.",
   },
   {
-    title: "Proven layout",
-    text: "These sites are already designed around clarity, trust, and conversion-friendly structure.",
-  },
-  {
-    title: "Easier decisions",
-    text: "Instead of choosing every pixel from scratch, you start with something strong and adapt it to your business.",
+    step: "5",
+    title: "Launch",
+    text: "Your site goes live and starts working for you.",
   },
 ];
 
 export const packages = [
   {
     label: "Starter",
-    name: "Starter — $399",
     price: "$399",
-    audience: "Best for businesses that want a polished launch with essential customization.",
+    audience: "Built for businesses that need a clean first website with the essentials.",
     included: [
       "Custom brand colors",
       "Your logo, text, and images",
@@ -130,78 +134,93 @@ export const packages = [
       "Mobile optimization",
       "Domain launch support",
     ],
-    cta: "Start with Starter",
+    cta: "Choose Starter",
     tone: "tone-starter",
+    priceNote: "Best for simple launches",
   },
   {
     label: "Growth",
-    name: "Growth — $749",
     price: "$749",
-    audience: "Best for businesses that want more functionality and a stronger lead flow.",
+    audience: "Built for businesses that want more functionality and a stronger lead flow.",
     included: [
       "Everything in Starter",
       "Additional custom sections",
       "Booking and contact flow setup",
       "Basic SEO setup",
       "Social media integration",
-      "Analytics setup",
     ],
     cta: "Choose Growth",
     tone: "tone-growth",
+    featured: true,
+    priceNote: "Best value",
   },
   {
     label: "Premium",
-    name: "Premium — $1,199",
     price: "$1,199",
-    audience: "Best for businesses that want deeper customization and a more tailored experience.",
+    audience: "Built for businesses that want deeper customization and a more tailored experience.",
     included: [
       "Everything in Growth",
-      "More advanced design edits",
+      "Advanced design edits",
       "Copywriting support",
       "Multi-page setup",
-      "Stronger conversion flow",
       "Priority turnaround",
     ],
-    cta: "Get Premium",
+    cta: "Choose Premium",
     tone: "tone-premium",
+    priceNote: "Most complete",
   },
 ];
 
-export const addOns = [
-  "Extra pages",
-  "Copywriting help",
-  "SEO improvements",
-  "Blog setup",
-  "Booking integration",
-  "Ongoing edits and support",
-  "Multi-location sections",
-  "Additional language version",
+export const maintenanceItems = [
+  "Content updates",
+  "Small changes",
+  "Bug fixes",
+  "Priority support",
 ];
+
+// Only add real, permission-given client quotes here. No fake or composite
+// testimonials — the testimonials section stays hidden until this has entries.
+export const testimonials = [];
 
 export const faqs = [
   {
-    question: "How fast can my website launch?",
+    question: "How much does a website cost?",
     answer:
-      "Most projects launch in 3 to 5 days once I have your logo, copy, services, contact details, and any images you want to use.",
+      "Starter is $399, Growth is $749, and Premium is $1,199. Every project begins with a required $149 upfront deposit.",
   },
   {
-    question: "What do I need to send you?",
+    question: "How long does it take?",
     answer:
-      "The usual checklist is simple: logo, business name, services, pricing if you want it shown, contact details, social links, and any reference sites or photos.",
+      "Most websites are ready for review in 3-5 business days once I have your details and deposit.",
   },
   {
-    question: "How much can be customized?",
+    question: "What is included?",
     answer:
-      "Colors, typography balance, layout sections, copy, contact flow, buttons, and business-specific content all get adapted to your brand and goals.",
+      "You get a custom layout, mobile-ready build, business content setup, contact flow, and launch prep based on your package.",
   },
   {
-    question: "Does this include mobile and basic launch setup?",
+    question: "Why is there a $149 deposit?",
     answer:
-      "Yes. These website systems are already built to be mobile-ready, and the launch packages include the setup needed to get your site online cleanly.",
+      "It reserves your spot, starts the project right away, and leaves the remaining balance for later.",
   },
   {
-    question: "How do revisions work?",
+    question: "Can I update the website later?",
     answer:
-      "You start from a strong structure, so revisions stay focused. That usually means faster approvals and fewer rounds than a full custom build from scratch.",
+      "Yes. You can request updates anytime or keep ongoing support through the monthly plan.",
+  },
+  {
+    question: "Do you provide maintenance?",
+    answer:
+      "Yes. Website Care is $99 per month and includes content updates, small changes, bug fixes, and priority support.",
+  },
+  {
+    question: "Do I need hosting?",
+    answer:
+      "No monthly hosting bill — I host your site on the Vercel Hobby plan for free. The only cost is your domain, typically $12-15/year through a registrar like Namecheap or Google Domains. I connect your domain during launch at no extra charge.",
+  },
+  {
+    question: "Can I use my own domain?",
+    answer:
+      "Yes. If you already own a domain, I can connect it during launch.",
   },
 ];
