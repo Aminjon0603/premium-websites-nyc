@@ -464,6 +464,14 @@ summary:focus-visible {
   line-height: 1.6;
 }
 
+.pricing-intro-note {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
 .hero-proof-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

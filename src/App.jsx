@@ -409,6 +409,11 @@ function App() {
                 </p>
               </div>
 
+              <p className="pricing-intro-note">
+                Every project starts with a short conversation about your business — not a generic
+                template. The packages below just make pricing simple, not the process.
+              </p>
+
               <div className="pricing-grid">
                 {packages.map((pkg) => (
                   <article className={`pricing-card ${pkg.tone} ${pkg.featured ? "pricing-featured" : ""}`} key={pkg.label}>
