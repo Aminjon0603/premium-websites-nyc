@@ -166,7 +166,7 @@ export const packages = [
   {
     label: "Starter",
     price: "$198",
-    fit: "A simple online presence.",
+    fit: "What you do and how to reach you.",
     pages: "1 page",
     adds: ["Clean, simple design"],
     notIncluded: "Domain connection not included",

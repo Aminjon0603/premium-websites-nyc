@@ -617,10 +617,11 @@ function HomePage({ selection, setSelection, onZoom }) {
           <div className="hero-grid">
             <div className="hero-copy">
               <h1 id="hero-title" className="display-xl">
-                Clear websites for NYC <em>small businesses.</em>
+                Websites for NYC small businesses, from <em>{startingPrice}.</em>
               </h1>
               <p className="lede hero-lede">
-                I'm Amin. I design and build sites for salons, barbershops, cafes, and local services, all by message.
+                I'm Amin. I design and build every site myself, for salons, barbershops, cafes, and local services.
+                No calls. We do it all by message.
               </p>
               <div className="hero-actions" ref={heroActionsRef}>
                 <a className="btn btn-primary" href="#contact">
@@ -632,15 +633,15 @@ function HomePage({ selection, setSelection, onZoom }) {
               </div>
               <dl className="hero-facts">
                 <div>
-                  <dt>Websites from</dt>
-                  <dd>{startingPrice} one-time</dd>
+                  <dt>Starter, usually</dt>
+                  <dd>3-5 business days</dd>
                 </div>
                 <div>
                   <dt>Process</dt>
-                  <dd>All by message, no calls</dd>
+                  <dd>By message</dd>
                 </div>
                 <div>
-                  <dt>Care after launch</dt>
+                  <dt>Care</dt>
                   <dd>Optional</dd>
                 </div>
               </dl>
@@ -723,7 +724,7 @@ function HomePage({ selection, setSelection, onZoom }) {
             <h2 id="work-title" className="display-md">
               Demo sites for <em>local businesses.</em>
             </h2>
-            <p>Concepts I built to show what your site could look like. Not client projects, but all live.</p>
+            <p>Demo concepts, not client work. Each one is live, so click around.</p>
           </div>
 
           <ol className="work-list">
@@ -767,9 +768,9 @@ function HomePage({ selection, setSelection, onZoom }) {
           </div>
           <div className="split-head reveal">
             <h2 id="pricing-title" className="display-md">
-              One-time prices. <em>No surprises.</em>
+              Pay once. <em>Know the price first.</em>
             </h2>
-            <p>Pick the size that fits today. Domain and hosting fees are paid separately.</p>
+            <p>Domain and hosting are paid separately, to the provider.</p>
           </div>
 
           <div className="package-base reveal">
@@ -818,7 +819,7 @@ function HomePage({ selection, setSelection, onZoom }) {
             <div className="care-intro">
               <p className="label">Optional add-on</p>
               <h3 id="care-title">Website care</h3>
-              <p>Optional. Add a plan to any package if you'd rather hand off updates.</p>
+              <p>Optional. I make your updates after launch, so you don't have to.</p>
               <p className="care-terms">{careTerms}</p>
             </div>
             {carePlans.map((plan) => {
@@ -912,8 +913,8 @@ function HomePage({ selection, setSelection, onZoom }) {
               Hi, I'm Amin. <em>You'll work with me directly.</em>
             </h2>
             <p className="lede">
-              I live in New York and build websites for small businesses here. I'm not an agency: the person you
-              message is the one who designs your site and writes the code.
+              I live in New York and build websites for small businesses here. I'm not an agency. You message me,
+              and I design your site and write the code.
             </p>
           </div>
         </div>
