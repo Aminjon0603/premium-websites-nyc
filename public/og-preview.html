@@ -2,8 +2,15 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=1200" />
     <title>Site by Amin OG Preview</title>
+    <!-- Source for sitebyamin-og.png. Render at 1200x630 and screenshot. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@500;600&display=swap"
+    />
     <style>
       html,
       body {
@@ -11,22 +18,123 @@
         height: 630px;
         margin: 0;
         overflow: hidden;
-        background: #0b0e13;
+        background: #0f0f0d;
+        color: #f1ede4;
+        font-family: Inter, Arial, sans-serif;
       }
 
-      body {
+      .frame {
+        position: absolute;
+        inset: 56px 64px;
         display: grid;
-        place-items: center;
+        grid-template-columns: 520px 1fr;
+        gap: 48px;
+        align-items: center;
       }
 
-      img {
+      .meta {
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #aaa497;
+      }
+
+      .brand {
+        font-family: "Instrument Serif", Georgia, serif;
+        font-size: 34px;
+      }
+
+      .brand em,
+      h1 em {
+        color: #e2b865;
+      }
+
+      h1 {
+        margin: 28px 0 24px;
+        font-family: "Instrument Serif", Georgia, serif;
+        font-weight: 400;
+        font-size: 74px;
+        line-height: 0.98;
+        letter-spacing: -0.01em;
+      }
+
+      .facts {
+        display: flex;
+        gap: 28px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(241, 237, 228, 0.2);
+        font-size: 22px;
+        font-weight: 600;
+      }
+
+      .facts span:first-child {
+        color: #e2b865;
+      }
+
+      .shot {
+        position: relative;
+        padding: 0 40px 50px 0;
+      }
+
+      .browser {
+        overflow: hidden;
+        border: 1px solid rgba(241, 237, 228, 0.28);
+        border-radius: 12px;
+        background: #1f1f1c;
+      }
+
+      .browser img {
         display: block;
-        width: 1200px;
-        height: 630px;
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        object-position: top;
+      }
+
+      .bar {
+        height: 24px;
+        border-bottom: 1px solid rgba(241, 237, 228, 0.14);
+      }
+
+      .phone {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 150px;
+        overflow: hidden;
+        border: 5px solid #1b1b18;
+        border-radius: 20px;
+        box-shadow: 0 0 0 1px rgba(241, 237, 228, 0.28);
+      }
+
+      .phone img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 390 / 760;
+        object-fit: cover;
+        object-position: top;
+        border-radius: 14px;
       }
     </style>
   </head>
   <body>
-    <img src="./sitebyamin-og.svg" alt="Site by Amin social share preview" />
+    <div class="frame">
+      <div>
+        <div class="brand">Site by <em>Amin</em></div>
+        <h1>Websites for NYC <em>small businesses.</em></h1>
+        <div class="facts">
+          <span>From $198 one-time</span>
+          <span>No calls needed</span>
+        </div>
+      </div>
+      <div class="shot">
+        <div class="browser">
+          <div class="bar"></div>
+          <img src="/work/chess-truck-home-desktop.webp" alt="" />
+        </div>
+        <div class="phone"><img src="/work/chess-truck-home-mobile.webp" alt="" /></div>
+      </div>
+    </div>
   </body>
 </html>

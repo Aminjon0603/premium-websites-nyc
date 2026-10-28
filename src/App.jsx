@@ -1,177 +1,980 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { demos, faqs, maintenanceItems, packages, steps, testimonials, trustItems } from "./siteContent";
+import { useEffect, useRef, useState } from "react";
+import {
+  bookingLevels,
+  carePlans,
+  caseStudy,
+  contact,
+  demos,
+  faqs,
+  featuredProject,
+  packages,
+  quotedSeparately,
+  startingPrice,
+  steps,
+} from "./siteContent";
 
-const initialFormState = {
-  businessName: "",
-  websiteType: "",
-  currentWebsite: "",
-  socialLink: "",
-  services: "",
-  preferredPackage: "",
-  timeline: "",
-  email: "",
-  phone: "",
-  notes: "",
+const CASE_PATH = featuredProject.caseUrl;
+
+const pageMeta = {
+  home: {
+    title: "Websites for NYC Small Businesses from $198 | Site by Amin",
+    description:
+      "Clear, mobile-friendly websites for NYC salons, barbershops, cafes, local services, and education programs. One-time packages from $198. Optional care from $78/month. No calls needed.",
+    canonical: "https://sitebyamin.com/",
+  },
+  case: {
+    title: "Chess & Truck Case Study | Site by Amin",
+    description:
+      "How Amin designed and built the Chess & Truck website for kids' chess programs in NYC: pages, forms, Stripe checkout, email, launch controls, SEO, and deployment.",
+    canonical: "https://sitebyamin.com/work/chess-and-truck",
+  },
 };
 
-function SectionCta({ text, buttonLabel, href = "#contact", className = "" }) {
+const normalizePath = (path) => (path.length > 1 ? path.replace(/\/+$/, "") : path);
+
+function setMeta(route) {
+  const meta = pageMeta[route];
+  document.title = meta.title;
+  document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
+  document.querySelector('link[rel="canonical"]')?.setAttribute("href", meta.canonical);
+  document.querySelector('meta[property="og:url"]')?.setAttribute("content", meta.canonical);
+  document.querySelector('meta[property="og:title"]')?.setAttribute("content", meta.title);
+  document.querySelector('meta[property="og:description"]')?.setAttribute("content", meta.description);
+}
+
+// Fades sections in as they scroll into view. Content stays visible when
+// JavaScript, IntersectionObserver, or motion is unavailable.
+function useReveal(routeKey) {
+  useEffect(() => {
+    const items = [...document.querySelectorAll(".reveal")];
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      items.forEach((item) => item.classList.add("is-in"));
+      return undefined;
+    }
+
+    document.documentElement.classList.add("can-reveal");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+    );
+
+    items.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, [routeKey]);
+}
+
+function ArrowIcon({ external = false }) {
   return (
-    <div className={`section-cta ${className}`.trim()}>
-      <p>{text}</p>
-      <a className="btn btn-secondary" href={href}>
-        {buttonLabel}
-      </a>
+    <svg className="icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+      {external ? (
+        <path d="M5 11 11 5M6 5h5v5" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      ) : (
+        <path d="M3 8h10M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      )}
+    </svg>
+  );
+}
+
+function ExternalLink({ href, className = "", children }) {
+  return (
+    <a className={className} href={href} target="_blank" rel="noreferrer">
+      {children}
+      <span className="sr-only"> (opens in a new tab)</span>
+    </a>
+  );
+}
+
+function SectionIndex({ number, label }) {
+  return (
+    <p className="section-index">
+      <span>({number})</span> {label}
+    </p>
+  );
+}
+
+function DeviceShots({ desktop, mobile, alt, priority = false, className = "" }) {
+  const loading = priority ? "eager" : "lazy";
+
+  return (
+    <div className={`device-shots ${className}`.trim()}>
+      <div className="browser-frame">
+        <div className="browser-bar" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <img
+          src={desktop}
+          alt={alt}
+          width="1440"
+          height="900"
+          loading={loading}
+          decoding="async"
+          fetchPriority={priority ? "high" : undefined}
+        />
+      </div>
+      {mobile ? (
+        <div className="phone-frame">
+          <img src={mobile} alt="" width="780" height="1688" loading={loading} decoding="async" />
+        </div>
+      ) : null}
     </div>
   );
 }
 
-function App() {
-  const [formState, setFormState] = useState(initialFormState);
-  const [submitState, setSubmitState] = useState({ status: "idle", message: "" });
-  const [showMobileBookbar, setShowMobileBookbar] = useState(false);
-  const heroActionsRef = useRef(null);
+function Header({ onHome, menuOpen, setMenuOpen }) {
+  const base = onHome ? "" : "/";
+  const links = [
+    ["Work", `${base}#work`],
+    ["Pricing", `${base}#pricing`],
+    ["Process", `${base}#process`],
+    ["About", `${base}#about`],
+    ["FAQ", `${base}#faq`],
+  ];
+
+  return (
+    <header className="site-header">
+      <div className="container header-row">
+        <a className="brand" href={onHome ? "#top" : "/"}>
+          Site by <em>Amin</em>
+        </a>
+
+        <nav className="site-nav" aria-label="Primary">
+          {links.map(([label, href]) => (
+            <a key={label} href={href}>
+              {label}
+            </a>
+          ))}
+        </nav>
+
+        <a className="btn btn-primary btn-small header-cta" href={`${base}#contact`}>
+          Start a project
+        </a>
+
+        <button
+          type="button"
+          className={`menu-toggle ${menuOpen ? "is-open" : ""}`}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span className="sr-only">{menuOpen ? "Close menu" : "Open menu"}</span>
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+        </button>
+      </div>
+
+      <nav id="mobile-menu" className={`mobile-menu ${menuOpen ? "is-open" : ""}`} aria-label="Mobile" hidden={!menuOpen}>
+        {links.map(([label, href]) => (
+          <a key={label} href={href} onClick={() => setMenuOpen(false)}>
+            {label}
+          </a>
+        ))}
+        <a className="btn btn-primary" href={`${base}#contact`} onClick={() => setMenuOpen(false)}>
+          Start a project
+        </a>
+      </nav>
+    </header>
+  );
+}
+
+function Footer({ onHome }) {
+  const base = onHome ? "" : "/";
   const year = new Date().getFullYear();
-  const whatsappNumber = "13323450632";
-  const whatsappLink = `https://wa.me/${whatsappNumber}`;
-  const phoneLabel = "+1 332 345 0632";
-  const instagramLink = "https://www.instagram.com/sitebyamin/";
-  const email = "amin2002abrorov@gmail.com";
-  const hasTestimonials = testimonials.length > 0;
 
-  const submitHint = useMemo(() => {
-    if (submitState.status === "loading") {
-      return "Sending your project details...";
-    }
+  return (
+    <footer className="site-footer">
+      <div className="container footer-grid">
+        <div>
+          <a className="brand" href="/">
+            Site by <em>Amin</em>
+          </a>
+          <p>Websites for small businesses in New York City.</p>
+        </div>
+        <nav aria-label="Footer">
+          <a href={`${base}#work`}>Work</a>
+          <a href={CASE_PATH}>Chess & Truck case study</a>
+          <a href={`${base}#pricing`}>Pricing</a>
+          <a href={`${base}#contact`}>Contact</a>
+        </nav>
+        <div className="footer-contact">
+          <ExternalLink href={contact.whatsappLink}>WhatsApp {contact.phoneLabel}</ExternalLink>
+          <ExternalLink href={contact.instagramLink}>Instagram {contact.instagramHandle}</ExternalLink>
+          <a href={`mailto:${contact.email}`}>{contact.email}</a>
+        </div>
+      </div>
+      <div className="container footer-meta">&copy; {year} Site by Amin. New York, NY.</div>
+    </footer>
+  );
+}
 
-    if (submitState.status === "success" || submitState.status === "error") {
-      return submitState.message;
-    }
+function ContactSection({ interest, setInterest }) {
+  const [form, setForm] = useState({ businessName: "", email: "", need: "" });
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState({ state: "idle", message: "" });
+  const fieldRefs = { businessName: useRef(null), email: useRef(null), need: useRef(null) };
 
-    if (formState.websiteType || formState.preferredPackage) {
-      return "Your request goes directly to Site by Amin. Reply comes by email or message.";
-    }
-
-    return "Send a few details and I will recommend the best option. Typical reply is within 1 business day.";
-  }, [formState.preferredPackage, formState.websiteType, submitState.message, submitState.status]);
-
-  const updateField = ({ target }) => {
-    const { name, value } = target;
-    setFormState((current) => ({ ...current, [name]: value }));
-
-    if (submitState.status !== "idle") {
-      setSubmitState({ status: "idle", message: "" });
-    }
+  const validate = (values) => {
+    const next = {};
+    if (!values.businessName.trim()) next.businessName = "Add your business name.";
+    if (!values.email.trim()) next.email = "Add an email so I can reply.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) next.email = "This email doesn't look right.";
+    if (!values.need.trim()) next.need = "Tell me a little about what you need.";
+    return next;
   };
 
-  const jumpToContact = (websiteType = "", preferredPackage = "") => {
-    setFormState((current) => ({
-      ...current,
-      websiteType: websiteType || current.websiteType,
-      preferredPackage: preferredPackage || current.preferredPackage,
-    }));
-
-    if (submitState.status !== "idle") {
-      setSubmitState({ status: "idle", message: "" });
-    }
-
-    const contactSection = document.getElementById("contact");
-    contactSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const update = ({ target }) => {
+    setForm((current) => ({ ...current, [target.name]: target.value }));
+    if (errors[target.name]) setErrors((current) => ({ ...current, [target.name]: undefined }));
+    if (status.state === "error") setStatus({ state: "idle", message: "" });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setSubmitState({ status: "loading", message: "" });
+    if (status.state === "loading") return;
+
+    const nextErrors = validate(form);
+    setErrors(nextErrors);
+    const firstInvalid = Object.keys(fieldRefs).find((key) => nextErrors[key]);
+    if (firstInvalid) {
+      fieldRefs[firstInvalid].current?.focus();
+      return;
+    }
+
+    setStatus({ state: "loading", message: "" });
 
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formState),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          businessName: form.businessName,
+          email: form.email,
+          notes: form.need,
+          preferredPackage: interest,
+          websiteType: interest || "Not specified",
+        }),
       });
-
       const payload = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(payload.error || "The form could not be sent right now. Please use email or message instead.");
+        throw new Error(payload.error || "Your message didn't go through. Please try again, or email or WhatsApp me instead.");
       }
 
-      setSubmitState({
-        status: "success",
-        message:
-          payload.message ||
-          "Your request was sent. I will reply by email or message after I review it.",
+      setStatus({
+        state: "success",
+        message: payload.message || "Thanks, your request is in. I'll reply by email after I read it.",
       });
-      setFormState(initialFormState);
+      setForm({ businessName: "", email: "", need: "" });
+      setInterest("");
     } catch (error) {
-      setSubmitState({
-        status: "error",
+      setStatus({
+        state: "error",
         message:
-          error instanceof Error
-            ? error.message
-            : "The form could not be sent right now. Please use email or message instead.",
+          error instanceof TypeError || !(error instanceof Error)
+            ? "Your message didn't go through. Please check your connection and try again, or email or WhatsApp me instead."
+            : error.message,
       });
     }
   };
 
+  const fieldProps = (name) => ({
+    id: `field-${name}`,
+    name,
+    ref: fieldRefs[name],
+    value: form[name],
+    onChange: update,
+    "aria-invalid": errors[name] ? "true" : undefined,
+    "aria-describedby": errors[name] ? `error-${name}` : undefined,
+  });
+
+  return (
+    <section className="section contact-section" id="contact" aria-labelledby="contact-title">
+      <div className="container contact-grid">
+        <div className="contact-intro reveal">
+          <SectionIndex number="07" label="Contact" />
+          <h2 id="contact-title" className="display-lg">
+            Tell me about <em>your business.</em>
+          </h2>
+          <p className="lede">
+            Three quick fields. I'll read it and reply by email with a suggested package, the price, and next
+            steps. No call needed.
+          </p>
+
+          <div className="direct-links">
+            <p className="label">Prefer to message?</p>
+            <ExternalLink href={contact.whatsappLink} className="direct-link">
+              <span>WhatsApp</span>
+              <strong>{contact.phoneLabel}</strong>
+            </ExternalLink>
+            <ExternalLink href={contact.instagramLink} className="direct-link">
+              <span>Instagram</span>
+              <strong>{contact.instagramHandle}</strong>
+            </ExternalLink>
+            <a href={`mailto:${contact.email}`} className="direct-link">
+              <span>Email</span>
+              <strong>{contact.email}</strong>
+            </a>
+          </div>
+        </div>
+
+        {status.state === "success" ? (
+          <div className="form-panel form-success reveal" role="status" tabIndex={-1} ref={(node) => node?.focus()}>
+            <p className="label">Request sent</p>
+            <h3>Thank you.</h3>
+            <p>{status.message}</p>
+            <button type="button" className="btn btn-ghost" onClick={() => setStatus({ state: "idle", message: "" })}>
+              Send another request
+            </button>
+          </div>
+        ) : (
+          <form className="form-panel reveal" onSubmit={handleSubmit} noValidate aria-busy={status.state === "loading"}>
+            {interest ? (
+              <div className="interest-chip">
+                <span>
+                  <span className="label">Attached to your request</span>
+                  <strong>{interest}</strong>
+                </span>
+                <button type="button" onClick={() => setInterest("")} aria-label={`Remove ${interest} from request`}>
+                  Remove
+                </button>
+              </div>
+            ) : null}
+
+            <div className="field">
+              <label htmlFor="field-businessName">Business name</label>
+              <input {...fieldProps("businessName")} autoComplete="organization" placeholder="e.g. Maple Street Barbers" />
+              {errors.businessName ? (
+                <p className="field-error" id="error-businessName">
+                  {errors.businessName}
+                </p>
+              ) : null}
+            </div>
+
+            <div className="field">
+              <label htmlFor="field-email">Email</label>
+              <input {...fieldProps("email")} type="email" autoComplete="email" inputMode="email" placeholder="you@example.com" />
+              {errors.email ? (
+                <p className="field-error" id="error-email">
+                  {errors.email}
+                </p>
+              ) : null}
+            </div>
+
+            <div className="field">
+              <label htmlFor="field-need">What do you need?</label>
+              <textarea
+                {...fieldProps("need")}
+                rows="5"
+                placeholder="What your business does, what the site should help with, and any site you like."
+              />
+              {errors.need ? (
+                <p className="field-error" id="error-need">
+                  {errors.need}
+                </p>
+              ) : null}
+            </div>
+
+            <button type="submit" className="btn btn-primary btn-block" disabled={status.state === "loading"}>
+              {status.state === "loading" ? "Sending..." : "Send my request"}
+              {status.state === "loading" ? null : <ArrowIcon />}
+            </button>
+
+            <p className={`form-status ${status.state === "error" ? "is-error" : ""}`} role={status.state === "error" ? "alert" : "status"} aria-live="polite">
+              {status.state === "loading" ? "Sending your request..." : status.message}
+            </p>
+          </form>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function HomePage({ interest, setInterest }) {
+  const heroActionsRef = useRef(null);
+  const [showBar, setShowBar] = useState(false);
+
+  const requestSimilar = (label) => {
+    setInterest(label);
+    const section = document.getElementById("contact");
+    section?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    window.setTimeout(() => document.getElementById("field-businessName")?.focus({ preventScroll: true }), 450);
+  };
+
   useEffect(() => {
-    const heroActions = heroActionsRef.current;
+    const hero = heroActionsRef.current;
+    const contactSection = document.getElementById("contact");
+    if (!hero || !contactSection || !("IntersectionObserver" in window)) return undefined;
 
-    if (!heroActions) {
-      return undefined;
+    let heroVisible = true;
+    let contactVisible = false;
+    const sync = () => setShowBar(!heroVisible && !contactVisible);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.target === hero) heroVisible = entry.isIntersecting;
+        if (entry.target === contactSection) contactVisible = entry.isIntersecting;
+      });
+      sync();
+    });
+    observer.observe(hero);
+    observer.observe(contactSection);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <>
+      <section className="hero" id="top" aria-labelledby="hero-title">
+        <div className="container">
+          <div className="hero-meta" aria-hidden="true">
+            <span>Site by Amin</span>
+            <span>Web design &amp; development</span>
+            <span>New York City</span>
+          </div>
+
+          <div className="hero-grid">
+            <div className="hero-copy">
+              <h1 id="hero-title" className="display-xl">
+                Websites that make your <em>small business</em> easy to choose.
+              </h1>
+              <p className="lede hero-lede">
+                I'm Amin, a web designer in New York. I build clear, mobile-friendly sites for salons,
+                barbershops, cafes, local services, and education programs, so customers can see what you
+                offer and reach you in a tap.
+              </p>
+              <div className="hero-actions" ref={heroActionsRef}>
+                <a className="btn btn-primary" href="#contact">
+                  Tell me about your business <ArrowIcon />
+                </a>
+                <a className="btn btn-ghost" href="#work">
+                  See my work
+                </a>
+              </div>
+              <dl className="hero-facts">
+                <div>
+                  <dt>Websites from</dt>
+                  <dd>{startingPrice} one-time</dd>
+                </div>
+                <div>
+                  <dt>Process</dt>
+                  <dd>All by message, no calls</dd>
+                </div>
+                <div>
+                  <dt>Care after launch</dt>
+                  <dd>Optional</dd>
+                </div>
+              </dl>
+            </div>
+
+            <figure className="hero-visual">
+              <DeviceShots
+                desktop={featuredProject.images.desktop}
+                mobile={featuredProject.images.mobile}
+                alt="Chess & Truck homepage on desktop and phone, a website built by Amin"
+                priority
+              />
+              <figcaption>
+                <span className="label">Featured project</span>
+                <a href={CASE_PATH}>
+                  Chess &amp; Truck, kids' chess programs in NYC <ArrowIcon />
+                </a>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section className="section featured" id="work" aria-labelledby="featured-title">
+        <div className="container">
+          <div className="section-head reveal">
+            <SectionIndex number="01" label="Featured project" />
+            <p className="status-pill">
+              <span aria-hidden="true" /> Real client project
+            </p>
+          </div>
+
+          <div className="featured-grid">
+            <div className="featured-copy reveal">
+              <h2 id="featured-title" className="display-lg">
+                Chess &amp; <em>Truck</em>
+              </h2>
+              <p className="lede">{featuredProject.summary}</p>
+              <dl className="spec-table">
+                {featuredProject.facts.map(([label, value]) => (
+                  <div key={label}>
+                    <dt>{label}</dt>
+                    <dd>{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <ul className="check-list">
+                {featuredProject.highlights.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              <div className="button-row">
+                <a className="btn btn-primary" href={CASE_PATH}>
+                  Read the case study <ArrowIcon />
+                </a>
+                <ExternalLink href={featuredProject.url} className="btn btn-ghost">
+                  Visit the live site <ArrowIcon external />
+                </ExternalLink>
+              </div>
+            </div>
+
+            <div className="featured-media reveal">
+              <DeviceShots
+                desktop={featuredProject.images.programsDesktop}
+                mobile={featuredProject.images.programsMobile}
+                alt="Chess & Truck programs section showing four programs, each marked Registration Opening Soon"
+              />
+              <p className="media-note">{featuredProject.status}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section work" aria-labelledby="work-title">
+        <div className="container">
+          <div className="section-head reveal">
+            <SectionIndex number="02" label="More examples" />
+          </div>
+          <div className="split-head reveal">
+            <h2 id="work-title" className="display-md">
+              Demo sites for <em>local businesses.</em>
+            </h2>
+            <p>
+              These are concepts I designed and built to show what a site for your type of business could look
+              like. They are not client projects. Click through, they're live.
+            </p>
+          </div>
+
+          <ol className="work-list">
+            {demos.map((demo, index) => (
+              <li className="work-item reveal" key={demo.id}>
+                <ExternalLink href={demo.demoUrl} className="work-media">
+                  <DeviceShots desktop={demo.desktop} mobile={demo.mobile} alt={demo.alt} />
+                </ExternalLink>
+                <div className="work-copy">
+                  <p className="work-kicker">
+                    <span>{String(index + 1).padStart(2, "0")}</span>
+                    <span className="tag">{demo.label}</span>
+                    <span>{demo.business}</span>
+                  </p>
+                  <h3>{demo.title}</h3>
+                  <p>{demo.problem}</p>
+                  <ul className="inline-list">
+                    {demo.features.map((feature) => (
+                      <li key={feature}>{feature}</li>
+                    ))}
+                  </ul>
+                  <div className="button-row">
+                    <ExternalLink href={demo.demoUrl} className="btn btn-ghost btn-small">
+                      View demo <ArrowIcon external />
+                    </ExternalLink>
+                    <button type="button" className="btn btn-link" onClick={() => requestSimilar(demo.formContext)}>
+                      I want a site like this <ArrowIcon />
+                    </button>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="section pricing" id="pricing" aria-labelledby="pricing-title">
+        <div className="container">
+          <div className="section-head reveal">
+            <SectionIndex number="03" label="Pricing" />
+          </div>
+          <div className="split-head reveal">
+            <h2 id="pricing-title" className="display-md">
+              One-time prices. <em>No surprises.</em>
+            </h2>
+            <p>
+              Pick the size that fits today. Every site is designed around your business, works on phones, and
+              comes with a written quote before any work starts.
+            </p>
+          </div>
+
+          <div className="price-table reveal">
+            {packages.map((pkg) => (
+              <article className={`price-col ${pkg.recommended ? "is-recommended" : ""}`} key={pkg.label} aria-labelledby={`pkg-${pkg.label}`}>
+                <div className="price-top">
+                  <h3 id={`pkg-${pkg.label}`}>{pkg.label}</h3>
+                  {pkg.recommended ? <span className="tag tag-gold">Fits most shops</span> : null}
+                </div>
+                <p className="price">
+                  {pkg.price}
+                  <span> one-time</span>
+                </p>
+                <p className="price-fit">{pkg.fit}</p>
+                <p className="price-pages">{pkg.pages}</p>
+                <ul className="check-list">
+                  {pkg.included.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+                <p className="price-timing">{pkg.timing}</p>
+                <button
+                  type="button"
+                  className={`btn ${pkg.recommended ? "btn-primary" : "btn-outline"} btn-block`}
+                  onClick={() => requestSimilar(`${pkg.label} package (${pkg.price})`)}
+                >
+                  Ask about {pkg.label}
+                </button>
+              </article>
+            ))}
+          </div>
+
+          <div className="pricing-extras">
+            <div className="extras-block reveal">
+              <h3>Booking, three ways</h3>
+              <ul className="booking-levels">
+                {bookingLevels.map((level) => (
+                  <li key={level.name}>
+                    <div>
+                      <strong>{level.name}</strong>
+                      <span>{level.text}</span>
+                    </div>
+                    <em>{level.where}</em>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="extras-block reveal">
+              <h3>Quoted separately</h3>
+              <p>Not part of any fixed package. I price these after we talk.</p>
+              <ul className="dash-list">
+                {quotedSeparately.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="care reveal" aria-labelledby="care-title">
+            <div className="care-intro">
+              <p className="label">Add-on</p>
+              <h3 id="care-title">Website care</h3>
+              <p>
+                Optional. Your site works without it. Choose a plan if you'd rather hand off updates after
+                launch.
+              </p>
+            </div>
+            {carePlans.map((plan) => (
+              <div className="care-plan" key={plan.label}>
+                <h4>{plan.label}</h4>
+                <p className="price price-sm">
+                  {plan.price}
+                  <span>{plan.period}</span>
+                </p>
+                <ul className="check-list">
+                  {plan.included.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+                <button type="button" className="btn btn-link" onClick={() => requestSimilar(`${plan.label} (${plan.price}${plan.period})`)}>
+                  Ask about {plan.label} <ArrowIcon />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section process" id="process" aria-labelledby="process-title">
+        <div className="container">
+          <div className="section-head reveal">
+            <SectionIndex number="04" label="Process" />
+          </div>
+          <div className="split-head reveal">
+            <h2 id="process-title" className="display-md">
+              Four steps, <em>all in writing.</em>
+            </h2>
+            <p>You can answer when it suits you, and every decision stays in one thread.</p>
+          </div>
+          <ol className="steps">
+            {steps.map((step, index) => (
+              <li className="reveal" key={step.title}>
+                <span className="step-num">{String(index + 1).padStart(2, "0")}</span>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="section about" id="about" aria-labelledby="about-title">
+        <div className="container about-grid">
+          <figure className="about-photo reveal">
+            <img src="/amin-portrait.jpg" alt="Amin standing in Times Square at night" width="859" height="1280" loading="lazy" decoding="async" />
+          </figure>
+          <div className="about-copy reveal">
+            <SectionIndex number="05" label="About" />
+            <h2 id="about-title" className="display-md">
+              Hi, I'm Amin. <em>You'll work with me directly.</em>
+            </h2>
+            <p className="lede">
+              I live in New York and build websites for small businesses here. I'm not an agency. The person
+              you message is the person who designs your site and writes the code.
+            </p>
+            <ul className="about-points">
+              <li>
+                <strong>Straight answers.</strong> You ask a question, I answer it. No account managers in between.
+              </li>
+              <li>
+                <strong>Plain English.</strong> I explain what your site needs and what it doesn't.
+              </li>
+              <li>
+                <strong>Clear scope.</strong> You know the price and what's included before I start.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="section faq" id="faq" aria-labelledby="faq-title">
+        <div className="container faq-grid">
+          <div className="reveal">
+            <SectionIndex number="06" label="FAQ" />
+            <h2 id="faq-title" className="display-md">
+              Questions, <em>answered.</em>
+            </h2>
+          </div>
+          <div className="faq-list reveal">
+            {faqs.map((item) => (
+              <details key={item.question}>
+                <summary>{item.question}</summary>
+                <p>{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <ContactSection interest={interest} setInterest={setInterest} />
+
+      <div className={`mobile-bar ${showBar ? "is-visible" : ""}`} aria-hidden={!showBar}>
+        <a className="btn btn-primary btn-block" href="#contact" tabIndex={showBar ? 0 : -1}>
+          Start a project, from {startingPrice}
+        </a>
+      </div>
+    </>
+  );
+}
+
+function CasePage() {
+  const p = featuredProject;
+
+  return (
+    <article className="case" aria-labelledby="case-title">
+      <header className="case-hero">
+        <div className="container">
+          <a className="back-link" href="/#work">
+            <span aria-hidden="true">&larr;</span> All work
+          </a>
+          <div className="case-hero-grid">
+            <div>
+              <p className="section-index">
+                <span>(Case study)</span> Real client project
+              </p>
+              <h1 id="case-title" className="display-xl">
+                Chess &amp; <em>Truck</em>
+              </h1>
+              <p className="lede">{p.summary}</p>
+            </div>
+            <dl className="spec-table">
+              {p.facts.map(([label, value]) => (
+                <div key={label}>
+                  <dt>{label}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+              <div>
+                <dt>Live site</dt>
+                <dd>
+                  <ExternalLink href={p.url}>chessandtruck.com</ExternalLink>
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <p className="status-banner">
+            <span aria-hidden="true" /> {p.status}
+          </p>
+          <DeviceShots
+            className="case-shots"
+            desktop={p.images.desktop}
+            mobile={p.images.mobile}
+            alt="Chess & Truck homepage on desktop and phone"
+            priority
+          />
+        </div>
+      </header>
+
+      <section className="section case-section" aria-labelledby="case-task">
+        <div className="container case-row reveal">
+          <SectionIndex number="01" label="The task" />
+          <div>
+            <h2 id="case-task" className="display-sm">
+              Explain four programs to busy parents, and be ready for launch day.
+            </h2>
+            {caseStudy.task.map((text) => (
+              <p key={text}>{text}</p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section case-section" aria-labelledby="case-role">
+        <div className="container case-row reveal">
+          <SectionIndex number="02" label="My role" />
+          <div>
+            <h2 id="case-role" className="display-sm">
+              Design, development, integrations, testing, and deployment.
+            </h2>
+            {caseStudy.role.map((text) => (
+              <p key={text}>{text}</p>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section case-section" aria-labelledby="case-work">
+        <div className="container case-row reveal">
+          <SectionIndex number="03" label="What I built" />
+          <div>
+            <h2 id="case-work" className="display-sm">
+              The work behind the pages.
+            </h2>
+            <div className="work-groups">
+              {caseStudy.work.map((group) => (
+                <div key={group.title}>
+                  <h3>{group.title}</h3>
+                  <ul className="dash-list">
+                    {group.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section case-section" aria-labelledby="case-features">
+        <div className="container">
+          <div className="case-row reveal">
+            <SectionIndex number="04" label="Key features" />
+            <h2 id="case-features" className="display-sm">
+              What parents see.
+            </h2>
+          </div>
+          <div className="feature-list">
+            {caseStudy.features.map((feature) => (
+              <figure className="feature reveal" key={feature.title}>
+                <DeviceShots desktop={feature.image} alt={feature.alt} />
+                <figcaption>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.text}</p>
+                </figcaption>
+              </figure>
+            ))}
+            <figure className="feature feature-mobile reveal">
+              <div className="phone-pair">
+                <div className="phone-frame">
+                  <img src={p.images.mobile} alt="Chess & Truck homepage on a phone" width="780" height="1688" loading="lazy" decoding="async" />
+                </div>
+                <div className="phone-frame">
+                  <img src={p.images.programsMobile} alt="Chess & Truck program cards on a phone" width="780" height="1688" loading="lazy" decoding="async" />
+                </div>
+              </div>
+              <figcaption>
+                <h3>Built for phones first</h3>
+                <p>Most parents check on a phone. Text, buttons, and the menu are sized for one-handed use.</p>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section className="section case-section" aria-labelledby="case-result">
+        <div className="container case-row reveal">
+          <SectionIndex number="05" label="Where it stands" />
+          <div>
+            <h2 id="case-result" className="display-sm">
+              {p.status}
+            </h2>
+            {caseStudy.result.map((text) => (
+              <p key={text}>{text}</p>
+            ))}
+            <p className="note">{caseStudy.pricingNote}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section case-cta" aria-labelledby="case-cta-title">
+        <div className="container reveal">
+          <h2 id="case-cta-title" className="display-lg">
+            Need something <em>like this?</em>
+          </h2>
+          <p className="lede">Tell me what your business needs. I'll reply with what it would take and a written quote.</p>
+          <div className="button-row">
+            <a className="btn btn-primary" href={`/?interest=${encodeURIComponent(p.id)}#contact`}>
+              Tell me about your project <ArrowIcon />
+            </a>
+            <a className="btn btn-ghost" href="/#pricing">
+              See package prices
+            </a>
+          </div>
+        </div>
+      </section>
+    </article>
+  );
+}
+
+function App() {
+  const path = normalizePath(window.location.pathname);
+  const route = path === CASE_PATH ? "case" : "home";
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [interest, setInterest] = useState(() => {
+    const value = new URLSearchParams(window.location.search).get("interest");
+    return value === featuredProject.id ? featuredProject.formContext : "";
+  });
+
+  useReveal(route);
+
+  useEffect(() => {
+    setMeta(route);
+  }, [route]);
+
+  useEffect(() => {
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, []);
+
+  useEffect(() => {
+    // Drop the ?interest= param once it has been read, keeping the hash.
+    if (window.location.search) {
+      window.history.replaceState(null, "", `${window.location.pathname}${window.location.hash}`);
     }
-
-    const mediaQuery = window.matchMedia("(max-width: 760px)");
-    let observer;
-    let removeFallback = () => {};
-
-    const handleVisibilityMode = () => {
-      if (!mediaQuery.matches) {
-        setShowMobileBookbar(false);
-        return;
-      }
-
-      if ("IntersectionObserver" in window) {
-        observer?.disconnect();
-        observer = new IntersectionObserver(
-          ([entry]) => {
-            setShowMobileBookbar(!entry.isIntersecting);
-          },
-          {
-            threshold: 0.35,
-            rootMargin: "0px 0px -84px 0px",
-          }
-        );
-
-        observer.observe(heroActions);
-        return;
-      }
-
-      const fallbackScroll = () => {
-        setShowMobileBookbar(window.scrollY > 420);
-      };
-
-      fallbackScroll();
-      window.addEventListener("scroll", fallbackScroll, { passive: true });
-      removeFallback = () => window.removeEventListener("scroll", fallbackScroll);
-    };
-
-    handleVisibilityMode();
-
-    const handleMediaChange = () => {
-      removeFallback();
-      observer?.disconnect();
-      handleVisibilityMode();
-    };
-
-    mediaQuery.addEventListener("change", handleMediaChange);
-
-    return () => {
-      removeFallback();
-      observer?.disconnect();
-      mediaQuery.removeEventListener("change", handleMediaChange);
-    };
+    if (window.location.hash) {
+      document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
+    }
   }, []);
 
   return (
@@ -179,611 +982,11 @@ function App() {
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
-      <div className="sales-page">
-        <div className="ambient ambient-one" />
-        <div className="ambient ambient-two" />
-
-        <header className="site-header">
-          <div className="container header-row">
-            <a className="brand" href="#top" aria-label="Site by Amin home">
-              <span className="brand-mark">SA</span>
-              <span className="brand-copy">
-                <strong>Site by Amin</strong>
-                <small>Custom websites for NYC businesses</small>
-              </span>
-            </a>
-
-            <nav className="site-nav" aria-label="Primary">
-              <a href="#demos">Portfolio</a>
-              <a href="#pricing">Pricing</a>
-              <a href="#faq">FAQ</a>
-              <a href="#contact">Contact</a>
-              <a className="nav-phone" href={whatsappLink} target="_blank" rel="noreferrer">
-                {phoneLabel}
-              </a>
-            </nav>
-
-            <a className="btn btn-primary btn-header" href="#contact">
-              Start Your Project
-            </a>
-          </div>
-        </header>
-
-        <main id="main-content">
-          <section className="hero-section" id="top" aria-labelledby="hero-title">
-            <div className="container hero-layout">
-              <div className="hero-copy">
-                <span className="eyebrow">Site by Amin</span>
-                <h1 id="hero-title">Websites That Help Local Businesses Get More Customers</h1>
-                <p className="hero-text">
-                  Custom websites for local businesses that need more calls and bookings — live in
-                  3-5 days.
-                </p>
-
-                <div className="hero-actions" ref={heroActionsRef}>
-                  <a className="btn btn-primary" href="#contact">
-                    Start Your Project
-                  </a>
-                  <a className="btn btn-secondary" href="#demos">
-                    View Live Demos
-                  </a>
-                </div>
-
-                <p className="hero-microcopy">
-                  Reply within 1 business day. Message-first. No phone tag.
-                </p>
-
-                <ul className="trust-line" aria-label="Quick highlights">
-                  <li>Starting at $399</li>
-                  <li>$149 to get started</li>
-                  <li>Mobile-first</li>
-                  <li>3-5 day turnaround</li>
-                </ul>
-
-                <p className="capacity-note">
-                  I take on a limited number of new projects each month so every site gets real
-                  attention.
-                </p>
-              </div>
-
-              <aside className="hero-panel" aria-label="Value highlights">
-                <div className="signal-card">
-                  <span className="panel-label">What you get</span>
-                  <strong>Make your business look credible before the first call.</strong>
-                  <p>
-                    Clear services. Stronger trust. A contact path that turns visitors into leads.
-                  </p>
-                </div>
-
-                <div className="preview-grid" aria-label="Preview of outcomes">
-                  <article className="preview-card preview-dental">
-                    <span>Results</span>
-                    <strong>More trust at first glance</strong>
-                  </article>
-                  <article className="preview-card preview-barber">
-                    <span>Process</span>
-                    <strong>Ready to launch in days</strong>
-                  </article>
-                  <article className="preview-card preview-spa">
-                    <span>Conversion</span>
-                    <strong>Clear path to contact</strong>
-                  </article>
-                  <article className="preview-card preview-expert">
-                    <span>Support</span>
-                    <strong>Support stays available</strong>
-                  </article>
-                </div>
-
-                <div className="contact-strip">
-                  <a href={whatsappLink} target="_blank" rel="noreferrer">
-                    <span className="contact-link-label">WhatsApp / Telegram</span>
-                    <strong className="contact-link-value">{phoneLabel}</strong>
-                  </a>
-                  <a href={instagramLink} target="_blank" rel="noreferrer">
-                    <span className="contact-link-label">Instagram</span>
-                    <strong className="contact-link-value">@sitebyamin</strong>
-                  </a>
-                  <a href={`mailto:${email}`}>
-                    <span className="contact-link-label">Email</span>
-                    <strong className="contact-link-value">{email}</strong>
-                  </a>
-                </div>
-              </aside>
-            </div>
-          </section>
-
-          <section className="section section-proof" aria-labelledby="why-title">
-            <div className="container proof-layout">
-              <div className="section-copy">
-                <span className="eyebrow">Why Choose SiteByAmin</span>
-                <h2 id="why-title">Why local businesses choose SiteByAmin.</h2>
-              </div>
-
-              <div className="proof-grid trust-grid">
-                {trustItems.map((item) => (
-                  <article className="proof-card trust-card" key={item.title}>
-                    <span className="proof-label trust-icon">{item.icon}</span>
-                    <h3>{item.title}</h3>
-                    <p>{item.text}</p>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section className="section" aria-labelledby="process-title">
-            <div className="container process-layout">
-              <div className="section-copy">
-                <span className="eyebrow">How It Works</span>
-                <h2 id="process-title">A simple process from first message to launch.</h2>
-              </div>
-
-              <div className="step-grid timeline-grid">
-                {steps.map((step) => (
-                  <article className="process-card timeline-card" key={step.step}>
-                    <span className="step-pill timeline-pill">{step.step}</span>
-                    <h3>{step.title}</h3>
-                    <p>{step.text}</p>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section className="section section-demos" id="demos" aria-labelledby="portfolio-title">
-            <div className="container demos-layout">
-              <div className="section-copy section-copy-wide">
-                <span className="eyebrow">Portfolio</span>
-                <h2 id="portfolio-title">Live website demos built for real businesses.</h2>
-                <p className="section-microcopy">
-                  Pick a direction, and I&rsquo;ll customize it around your business.
-                </p>
-              </div>
-
-              <div className="demo-grid">
-                {demos.map((demo) => (
-                  <article className={`demo-card ${demo.theme}`} key={demo.id}>
-                    <div className="demo-top">
-                      <span className="demo-kicker">{demo.kicker}</span>
-                      <span className="demo-delivery">{demo.delivery}</span>
-                    </div>
-
-                    <a
-                      className="demo-shot"
-                      href={demo.demoUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`Open ${demo.title}`}
-                    >
-                      <img src={demo.previewImage} alt={demo.previewAlt} loading="lazy" decoding="async" />
-                      <span className="demo-shot-badge">Live preview</span>
-                    </a>
-
-                    <div className="portfolio-copy">
-                      <span className="portfolio-category">{demo.category}</span>
-                      <h3>{demo.title}</h3>
-                      <p>{demo.text}</p>
-                    </div>
-
-                    <dl className="demo-meta">
-                      <div className="demo-meta-row">
-                        <dt className="demo-meta-label">Best for</dt>
-                        <dd className="demo-meta-value">{demo.bestFor}</dd>
-                      </div>
-                      <div className="demo-meta-row">
-                        <dt className="demo-meta-label">Includes</dt>
-                        <dd className="demo-meta-value">{demo.includes}</dd>
-                      </div>
-                    </dl>
-
-                    <div className="demo-actions">
-                      <a className="btn btn-secondary" href={demo.demoUrl} target="_blank" rel="noreferrer">
-                        Live Preview
-                      </a>
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={() => jumpToContact(demo.formType)}
-                      >
-                        Customize This Website
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
-
-              <SectionCta
-                text="See a direction you like?"
-                buttonLabel="Let's Build Your Website"
-              />
-            </div>
-          </section>
-
-          <section className="section section-pricing" id="pricing" aria-labelledby="pricing-title">
-            <div className="container pricing-layout pricing-layout-stack">
-              <div className="section-copy section-copy-wide">
-                <span className="eyebrow">Pricing</span>
-                <h2 id="pricing-title">Simple pricing for a faster launch.</h2>
-                <p className="section-microcopy">
-                  One-time pricing. Hosting and extra scope can be added if needed.
-                </p>
-              </div>
-
-              <p className="pricing-intro-note">
-                Every project starts with a short conversation about your business — not a generic
-                template. The packages below just make pricing simple, not the process.
-              </p>
-
-              <div className="pricing-grid">
-                {packages.map((pkg) => (
-                  <article className={`pricing-card ${pkg.tone} ${pkg.featured ? "pricing-featured" : ""}`} key={pkg.label}>
-                    <div className="pricing-header">
-                      <span className="pricing-label">{pkg.label}</span>
-                      {pkg.featured ? <span className="pricing-flag">Most popular</span> : null}
-                    </div>
-                    <h3>{pkg.label}</h3>
-                    <div className="pricing-price">{pkg.price}</div>
-                    <p className="price-context">{pkg.priceNote}</p>
-                    <p className="pricing-audience">{pkg.audience}</p>
-                    <ul className="pricing-list" aria-label={`${pkg.label} package details`}>
-                      {pkg.included.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                    <button
-                      type="button"
-                      className={`btn ${pkg.featured ? "btn-primary" : "btn-secondary"}`}
-                      onClick={() => jumpToContact("", pkg.label)}
-                    >
-                      {pkg.cta}
-                    </button>
-                  </article>
-                ))}
-              </div>
-
-              <div className="deposit-banner" role="note" aria-label="Deposit information">
-                <strong>Start your project with a $149 deposit.</strong>
-                <span>Reserve your spot, start right away, and pay the balance after approval.</span>
-              </div>
-
-              <p className="guarantee-note">
-                Not happy with the design direction? I&rsquo;ll revise it until it&rsquo;s right, or
-                refund your deposit before launch.
-              </p>
-
-              <article className="detail-card maintenance-card" aria-labelledby="maintenance-title">
-                <div className="maintenance-copy">
-                  <span className="eyebrow">Website Care</span>
-                  <h2 id="maintenance-title">$99/month</h2>
-                  <p className="section-microcopy">
-                    For businesses that want updates handled for them.
-                  </p>
-                </div>
-                <ul className="detail-pill-grid maintenance-list" aria-label="Maintenance plan includes">
-                  {maintenanceItems.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-                <button type="button" className="btn btn-secondary" onClick={() => jumpToContact("", "Maintenance")}>
-                  Ask About Website Care
-                </button>
-              </article>
-
-              <SectionCta
-                text="Need a site that works without a long agency timeline?"
-                buttonLabel="Start Your Project"
-              />
-            </div>
-          </section>
-
-          {hasTestimonials ? (
-            <section className="section section-testimonials" id="testimonials" aria-labelledby="testimonials-title">
-              <div className="container testimonials-layout">
-                <div className="section-copy">
-                  <span className="eyebrow">Testimonials</span>
-                  <h2 id="testimonials-title">What clients are saying.</h2>
-                  <p>
-                    Real feedback from local businesses I&rsquo;ve built websites for.
-                  </p>
-                </div>
-
-                <div className="testimonial-grid">
-                  {testimonials.map((item, index) => (
-                    <article className="detail-card testimonial-card" key={`${item.name}-${index}`}>
-                      <span className="proof-label">{item.tag}</span>
-                      <blockquote className="testimonial-quote">{item.quote}</blockquote>
-                      <footer className="testimonial-meta">
-                        <strong>{item.name}</strong>
-                        <span>{item.role}</span>
-                      </footer>
-                    </article>
-                  ))}
-                </div>
-              </div>
-            </section>
-          ) : null}
-
-          <section className="section" aria-labelledby="about-title">
-            <div className="container split-detail-layout about-layout">
-              <article className="detail-card detail-card-contrast">
-                <span className="eyebrow eyebrow-contrast">About Me</span>
-                <h2 id="about-title">I build websites that make local businesses easier to trust.</h2>
-                <p>
-                  I help local businesses launch fast without looking cheap or generic.
-                </p>
-                <p>
-                  The goal is simple: explain what you do, build trust fast, and make contact easy.
-                </p>
-                <a className="btn btn-secondary" href="#contact">
-                  Start Your Project
-                </a>
-              </article>
-
-              <aside className="detail-card about-photo-card" aria-label="Portrait of Amin">
-                <span className="eyebrow">Portrait</span>
-                <div className="photo-frame">
-                  <img
-                    className="about-photo"
-                    src="/amin-portrait.jpg"
-                    alt="Amin standing in Times Square at night"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </aside>
-            </div>
-          </section>
-
-          <section className="section section-faq" id="faq" aria-labelledby="faq-title">
-            <div className="container faq-layout">
-              <div className="section-copy">
-                <span className="eyebrow">FAQ</span>
-                <h2 id="faq-title">Common questions before getting started.</h2>
-                <p>Short answers. No surprises.</p>
-              </div>
-
-              <div className="faq-accordion">
-                {faqs.map((item) => (
-                  <details className="faq-item" key={item.question}>
-                    <summary>{item.question}</summary>
-                    <p>{item.answer}</p>
-                  </details>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section className="section" aria-labelledby="final-cta-title">
-            <div className="container">
-              <div className="cta-panel final-cta">
-                <div className="cta-copy">
-                  <span className="eyebrow eyebrow-contrast">Ready to launch</span>
-                  <h2 id="final-cta-title">Ready to grow your business online?</h2>
-                  <p>
-                    Send a few details and I will recommend the fastest way to launch.
-                  </p>
-                  <ul className="trust-line final-cta-pills" aria-label="Final call to action highlights">
-                    <li>Starting at $399</li>
-                    <li>$149 starts the project</li>
-                    <li>3-5 day turnaround</li>
-                  </ul>
-                  <div className="cta-actions">
-                    <a className="btn btn-primary" href="#contact">
-                      Start Your Project
-                    </a>
-                    <a className="btn btn-secondary" href={whatsappLink} target="_blank" rel="noreferrer">
-                      Message on WhatsApp
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="section" id="contact" aria-labelledby="contact-title">
-            <div className="container contact-layout">
-              <div className="section-copy">
-                <span className="eyebrow">Contact</span>
-                <h2 id="contact-title">Tell me what you need.</h2>
-                <p>Send a few details and I will recommend the best package.</p>
-                <p className="section-microcopy">
-                  Best for local businesses that need more trust, more inquiries, and a faster launch.
-                </p>
-              </div>
-
-              <div className="contact-grid">
-                <form
-                  className="contact-form"
-                  onSubmit={handleSubmit}
-                  aria-busy={submitState.status === "loading"}
-                  aria-label="Project inquiry form"
-                >
-                  <div className="field-grid">
-                    <label className="field">
-                      <span>Business name</span>
-                      <input
-                        name="businessName"
-                        autoComplete="organization"
-                        value={formState.businessName}
-                        onChange={updateField}
-                        placeholder="Your business name"
-                        required
-                      />
-                    </label>
-
-                    <label className="field">
-                      <span>Website type</span>
-                      <input
-                        name="websiteType"
-                        value={formState.websiteType}
-                        onChange={updateField}
-                        placeholder="Barber, salon, dentist, restaurant..."
-                        required
-                      />
-                    </label>
-
-                    <label className="field">
-                      <span>Current website</span>
-                      <input
-                        name="currentWebsite"
-                        type="url"
-                        autoComplete="url"
-                        inputMode="url"
-                        value={formState.currentWebsite}
-                        onChange={updateField}
-                        placeholder="https://yourwebsite.com"
-                      />
-                    </label>
-
-                    <label className="field">
-                      <span>Social media</span>
-                      <input
-                        name="socialLink"
-                        value={formState.socialLink}
-                        onChange={updateField}
-                        placeholder="Instagram, Facebook, or another profile"
-                      />
-                    </label>
-
-                    <label className="field field-wide">
-                      <span>Services</span>
-                      <textarea
-                        name="services"
-                        value={formState.services}
-                        onChange={updateField}
-                        rows="3"
-                        placeholder="List the main services you want on the site"
-                      />
-                    </label>
-
-                    <label className="field">
-                      <span>Preferred package</span>
-                      <select name="preferredPackage" value={formState.preferredPackage} onChange={updateField}>
-                        <option value="">Select package</option>
-                        {packages.map((pkg) => (
-                          <option key={pkg.label} value={pkg.label}>
-                            {pkg.label}
-                          </option>
-                        ))}
-                        <option value="Maintenance">Maintenance</option>
-                      </select>
-                    </label>
-
-                    <label className="field">
-                      <span>Timeline</span>
-                      <input
-                        name="timeline"
-                        value={formState.timeline}
-                        onChange={updateField}
-                        placeholder="As soon as possible / this month / flexible"
-                      />
-                    </label>
-
-                    <label className="field">
-                      <span>Email</span>
-                      <input
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        inputMode="email"
-                        value={formState.email}
-                        onChange={updateField}
-                        placeholder="you@example.com"
-                        required
-                      />
-                    </label>
-
-                    <label className="field">
-                      <span>Phone</span>
-                      <input
-                        name="phone"
-                        type="tel"
-                        autoComplete="tel"
-                        inputMode="tel"
-                        value={formState.phone}
-                        onChange={updateField}
-                        placeholder="+1 ..."
-                      />
-                    </label>
-
-                    <label className="field field-wide">
-                      <span>Notes</span>
-                      <textarea
-                        name="notes"
-                        value={formState.notes}
-                        onChange={updateField}
-                        rows="4"
-                        placeholder="Tell me what style you want, what business you run, or which demo you like most"
-                      />
-                    </label>
-                  </div>
-
-                  <button type="submit" className="btn btn-primary btn-full" disabled={submitState.status === "loading"}>
-                    {submitState.status === "loading" ? "Sending..." : "Start My Project"}
-                  </button>
-                  <small
-                    className={`submit-hint submit-${submitState.status}`}
-                    role={submitState.status === "error" ? "alert" : "status"}
-                    aria-live="polite"
-                  >
-                    {submitHint}
-                  </small>
-                </form>
-
-                <aside className="contact-card">
-                  <span className="panel-label">Direct contact</span>
-                  <h3>Prefer to message?</h3>
-                  <p>
-                    Send a message on WhatsApp, Instagram, or email. I will point you to the fastest next step.
-                  </p>
-                  <p className="contact-note">
-                    Reply is usually within 1 business day. Best by email or message.
-                  </p>
-                  <div className="direct-links">
-                    <a href={whatsappLink} target="_blank" rel="noreferrer">
-                      <span className="contact-link-label">WhatsApp / Telegram</span>
-                      <strong className="contact-link-value">{phoneLabel}</strong>
-                    </a>
-                    <a href={instagramLink} target="_blank" rel="noreferrer">
-                      <span className="contact-link-label">Instagram</span>
-                      <strong className="contact-link-value">@sitebyamin</strong>
-                    </a>
-                    <a href={`mailto:${email}`}>
-                      <span className="contact-link-label">Email</span>
-                      <strong className="contact-link-value">{email}</strong>
-                    </a>
-                  </div>
-                </aside>
-              </div>
-            </div>
-          </section>
-        </main>
-
-        <footer className="site-footer">
-          <div className="container footer-row">
-            <div className="footer-bio">
-              Custom websites for local businesses that need more trust, more inquiries, and a faster launch.
-            </div>
-            <nav className="footer-links" aria-label="Footer">
-              <a href="#demos">Portfolio</a>
-              <a href="#pricing">Pricing</a>
-              <a href="#faq">FAQ</a>
-              <a href="#contact">Contact</a>
-              <a href={instagramLink} target="_blank" rel="noreferrer">
-                Instagram
-              </a>
-              <a href={`mailto:${email}`}>Email</a>
-            </nav>
-            <div className="footer-meta">&copy; {year} Site by Amin</div>
-          </div>
-        </footer>
-
-        <div className={`mobile-bookbar ${showMobileBookbar ? "is-visible" : ""}`}>
-          <a className="btn btn-primary" href="#contact">
-            Start Your Project
-          </a>
-        </div>
-      </div>
+      <Header onHome={route === "home"} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <main id="main-content">
+        {route === "case" ? <CasePage /> : <HomePage interest={interest} setInterest={setInterest} />}
+      </main>
+      <Footer onHome={route === "home"} />
     </>
   );
 }

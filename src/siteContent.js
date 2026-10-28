@@ -1,216 +1,288 @@
+// Public copy for sitebyamin.com. Keep every claim here verifiable:
+// no invented results, reviews, revision counts, refunds, or free hosting.
+
+export const contact = {
+  email: "amin2002abrorov@gmail.com",
+  whatsappNumber: "13323450632",
+  whatsappLink: "https://wa.me/13323450632",
+  phoneLabel: "+1 332 345 0632",
+  instagramLink: "https://www.instagram.com/sitebyamin/",
+  instagramHandle: "@sitebyamin",
+};
+
+export const startingPrice = "$198";
+
+export const featuredProject = {
+  id: "chess-and-truck",
+  name: "Chess & Truck",
+  url: "https://www.chessandtruck.com/",
+  caseUrl: "/work/chess-and-truck",
+  summary: "A multi-page website for kids' chess programs in New York City.",
+  status: "Website developed and published. Program registration is opening soon.",
+  formContext: "Project like Chess & Truck",
+  facts: [
+    ["Client", "Chess & Truck, New York City"],
+    ["Business", "Chess camps, tournaments, lessons, and after-school programs for kids"],
+    ["My role", "Website design and development, integrations, testing, and deployment"],
+    ["Status", "Published. Registration opening soon"],
+  ],
+  highlights: [
+    "Separate pages for Camps, Tournaments, Private Lessons, and After-School",
+    "Phone-friendly layout and menu, with motion that respects reduced-motion settings",
+    "Stripe checkout and email confirmations, built and locked until programs open",
+    "Search basics: sitemap, canonical links, and social previews",
+  ],
+  images: {
+    desktop: "/work/chess-truck-home-desktop.webp",
+    mobile: "/work/chess-truck-home-mobile.webp",
+    programsDesktop: "/work/chess-truck-programs-desktop.webp",
+    programsMobile: "/work/chess-truck-programs-mobile.webp",
+    campsDesktop: "/work/chess-truck-camps-desktop.webp",
+  },
+};
+
+// Details for the Chess & Truck case page. Checked against the project's code
+// (chess-and-truck-site) and the live site on 2026-10-27.
+export const caseStudy = {
+  task: [
+    "Chess & Truck runs chess programs for kids in New York City. Parents need to understand four different programs quickly, find answers to common questions, and get in touch.",
+    "The site also had to be ready to take registrations and payments once programs open, without letting anyone register or pay before then.",
+  ],
+  role: [
+    "I designed and built the website, set up the integrations, wrote the tests, and handled deployment and the domain.",
+    "Chess & Truck runs the programs. Program details and much of the homepage wording come from the Chess & Truck team.",
+  ],
+  work: [
+    {
+      title: "Pages and design",
+      items: [
+        "Multi-page site: Home, Camps, Tournaments, Private Lessons, After-School, About, FAQ, and Contact",
+        "Terms, Privacy, and other utility pages",
+        "Responsive layout with a mobile menu",
+        "Animations that turn off for visitors who prefer reduced motion",
+      ],
+    },
+    {
+      title: "Forms and email",
+      items: [
+        "Contact form with validation and clear error states",
+        "Resend for contact emails and payment emails",
+      ],
+    },
+    {
+      title: "Payments and launch control",
+      items: [
+        "Server API routes on Vercel",
+        "Stripe Checkout, a webhook, and a payment status check",
+        "A launch gate that blocks registration and payments until a program is approved and open",
+      ],
+    },
+    {
+      title: "Notify-me list",
+      items: [
+        "Supabase-based sign-up list with email confirmation, unsubscribe links, and access protection",
+        "Built and tested, but not switched on for visitors yet",
+      ],
+    },
+    {
+      title: "Search and sharing",
+      items: ["Page titles and descriptions", "sitemap.xml, robots.txt, and canonical links", "Social preview images"],
+    },
+    {
+      title: "Launch and quality",
+      items: [
+        "Domain setup and publishing through GitHub and Vercel",
+        "Automated tests for validation, launch rules, security, and the notify list",
+        "Build checks and a launch-readiness script before any program opens",
+      ],
+    },
+  ],
+  features: [
+    {
+      title: "Four programs, one clear homepage",
+      text: "Each program gets its own card, status label, and page, so parents can go straight to the one they care about.",
+      image: "/work/chess-truck-programs-desktop.webp",
+      alt: "Chess & Truck homepage section listing four programs: Chess Camps, Chess Tournaments, Private Chess Lessons, and After-School Programs",
+    },
+    {
+      title: "Honest program pages",
+      text: "Program pages show what is planned and what is not announced yet, instead of placeholder dates or prices.",
+      image: "/work/chess-truck-camps-desktop.webp",
+      alt: "Chess & Truck camps page with a Registration Opening Soon label and a camp details panel",
+    },
+  ],
+  result: [
+    "The website is developed and published at chessandtruck.com.",
+    "Registration, payments, and the notify-me list stay switched off until Chess & Truck opens its programs. The first camp has not happened yet, so there are no sign-up or sales numbers to report.",
+  ],
+  pricingNote:
+    "A project like this is custom work. Payments, databases, and email automation are quoted after we talk about what you need. They are not part of a fixed package.",
+};
+
 export const demos = [
   {
-    id: "dental",
-    category: "Salon",
-    kicker: "Salons",
-    title: "Salon website built for bookings",
-    text: "Online booking. Clear services. Mobile-first layout.",
-    bestFor: "Salons, stylists, beauty studios",
-    includes: "Services, team, contact, booking CTA",
-    delivery: "Customized in 3-5 days",
+    id: "salon",
+    label: "Demo concept",
+    business: "Beauty salon",
+    title: "Simple Everyday Salon",
+    problem: "Puts prices, hours, and a booking button on the first screen, so clients don't have to call to ask.",
+    features: ["Service menu with prices", "Hours and location up front", "Booking and call buttons"],
     demoUrl: "https://simple-everyday-salon.vercel.app/",
-    formType: "Salon website",
-    theme: "theme-dental",
-    previewImage: "/previews/dental-demo-preview.png",
-    previewAlt: "Preview card for the salon website demo",
+    desktop: "/work/salon-desktop.webp",
+    mobile: "/work/salon-mobile.webp",
+    alt: "Homepage of the Simple Everyday Salon demo website",
+    formContext: "Salon website (like the salon demo)",
   },
   {
     id: "barber",
-    category: "Barbershop",
-    kicker: "Barbershops",
-    title: "Barbershop site built for appointments",
-    text: "Sharp branding. Clear pricing. Fast booking path.",
-    bestFor: "Barbershops, grooming studios, men's care brands",
-    includes: "Services, team, pricing, proof, booking CTA",
-    delivery: "Customized in 3-5 days",
-    demoUrl: "https://mq-barber-shop.vercel.app",
-    formType: "Barbershop website",
-    theme: "theme-barber",
-    previewImage: "/previews/barbershop-demo-preview.png",
-    previewAlt: "Preview card for the barbershop website demo",
+    label: "Demo concept",
+    business: "Barbershop",
+    title: "Neighborhood barbershop",
+    problem: "Shows the storefront, services, and daily hours, so walk-in customers know what to expect.",
+    features: ["Storefront photo gallery", "Services list", "Call and directions buttons", "English and Spanish versions"],
+    demoUrl: "https://mq-barber-shop.vercel.app/",
+    desktop: "/work/barber-desktop.webp",
+    mobile: "/work/barber-mobile.webp",
+    alt: "Homepage of the barbershop demo website with storefront photos",
+    formContext: "Barbershop website (like the barbershop demo)",
   },
   {
     id: "spa",
-    category: "Spa & Wellness",
-    kicker: "Wellness",
-    title: "Spa website with a premium first impression",
-    text: "Service highlights. Trust sections. Easy inquiry flow.",
-    bestFor: "Spas, med spas, beauty studios, wellness brands",
-    includes: "Service highlights, story, proof, inquiry CTA",
-    delivery: "Customized in 3-5 days",
-    demoUrl: "https://luxury-spa-demo.vercel.app",
-    formType: "Spa and wellness website",
-    theme: "theme-spa",
-    previewImage: "/previews/spa-demo-preview.png",
-    previewAlt: "Preview card for the luxury spa website demo",
-  },
-  {
-    id: "expert",
-    category: "Programs & Camps",
-    kicker: "Education",
-    title: "Program website with clear registration",
-    text: "Program details. Parent trust. Strong call to register.",
-    bestFor: "Camps, classes, after-school programs, instructors",
-    includes: "Program highlights, proof, registration flow, CTA",
-    delivery: "Customized in 3-5 days",
-    demoUrl: "https://www.chessandtruck.com/",
-    formType: "Program or camp website",
-    theme: "theme-expert",
-    previewImage: "/previews/expert-demo-preview.png",
-    previewAlt: "Preview card for the Chess and Truck website demo",
-  },
-];
-
-export const trustItems = [
-  {
-    icon: "01",
-    title: "Fast turnaround",
-    text: "Most sites are ready for review in 3-5 business days.",
-  },
-  {
-    icon: "02",
-    title: "Mobile-first",
-    text: "Built for the phone screen first, then desktop.",
-  },
-  {
-    icon: "03",
-    title: "Starting at $399",
-    text: "A clean launch price for businesses that need to move now.",
-  },
-  {
-    icon: "04",
-    title: "Ongoing support available",
-    text: "Updates and support stay available after launch.",
-  },
-];
-
-export const steps = [
-  {
-    step: "1",
-    title: "Tell me about your business",
-    text: "Send your services, goals, and the style you want.",
-  },
-  {
-    step: "2",
-    title: "Start with the $149 deposit",
-    text: "Your spot is reserved and work starts right away.",
-  },
-  {
-    step: "3",
-    title: "I build your website",
-    text: "I customize the layout, copy, and contact flow.",
-  },
-  {
-    step: "4",
-    title: "Review and revisions",
-    text: "You send edits. I refine the details.",
-  },
-  {
-    step: "5",
-    title: "Launch",
-    text: "Your site goes live and starts working for you.",
+    label: "Demo concept",
+    business: "Spa and wellness",
+    title: "Luxury spa",
+    problem: "Gives a calm, premium first impression and a short path to directions or an inquiry.",
+    features: ["Service highlights", "Space and story sections", "Visit and inquiry buttons"],
+    demoUrl: "https://luxury-spa-demo.vercel.app/",
+    desktop: "/work/spa-desktop.webp",
+    mobile: "/work/spa-mobile.webp",
+    alt: "Homepage of the luxury spa demo website",
+    formContext: "Spa or wellness website (like the spa demo)",
   },
 ];
 
 export const packages = [
   {
     label: "Starter",
-    price: "$399",
-    audience: "Built for businesses that need a clean first website with the essentials.",
-    included: [
-      "Custom brand colors",
-      "Your logo, text, and images",
-      "Contact form",
-      "Mobile optimization",
-      "Domain launch support",
-    ],
-    cta: "Choose Starter",
-    tone: "tone-starter",
-    priceNote: "Best for simple launches",
+    price: "$198",
+    fit: "You need one clear page that explains what you do and how to reach you.",
+    pages: "1 page",
+    included: ["Mobile-friendly design", "Contact form", "Your logo, text, and photos"],
+    timing: "Usually ready for review in 3-5 business days once I have your content.",
   },
   {
-    label: "Growth",
-    price: "$749",
-    audience: "Built for businesses that want more functionality and a stronger lead flow.",
-    included: [
-      "Everything in Starter",
-      "Additional custom sections",
-      "Booking and contact flow setup",
-      "Basic SEO setup",
-      "Social media integration",
-    ],
-    cta: "Choose Growth",
-    tone: "tone-growth",
-    featured: true,
-    priceNote: "Best value",
+    label: "Business",
+    price: "$298",
+    fit: "You want separate pages for services, about, and contact.",
+    pages: "Up to 5 pages",
+    included: ["Custom design", "Contact or lead form", "Basic SEO setup", "Domain connection", "Mobile-friendly design"],
+    timing: "I'll give you a date once I see your pages and content.",
+    recommended: true,
   },
   {
     label: "Premium",
-    price: "$1,199",
-    audience: "Built for businesses that want deeper customization and a more tailored experience.",
+    price: "$498",
+    fit: "You have more to show, like a full service menu, a catalog, or a booking app.",
+    pages: "Up to 10 pages",
     included: [
-      "Everything in Growth",
-      "Advanced design edits",
-      "Copywriting support",
-      "Multi-page setup",
-      "Priority turnaround",
+      "Advanced custom design",
+      "Booking: link or embed the booking service you already use",
+      "Or a catalog or menu page (no online checkout)",
+      "Basic analytics setup",
+      "Basic SEO setup",
+      "Priority support",
     ],
-    cta: "Choose Premium",
-    tone: "tone-premium",
-    priceNote: "Most complete",
+    timing: "I'll give you a date once I see your pages and content.",
   },
 ];
 
-export const maintenanceItems = [
-  "Content updates",
-  "Small changes",
-  "Bug fixes",
-  "Priority support",
+export const quotedSeparately = [
+  "Your own booking or registration system",
+  "Online payments and checkout",
+  "Customer accounts, databases, and email automation",
+  "Other third-party integrations",
+  "Domain and hosting fees, paid to the provider",
 ];
 
-// Only add real, permission-given client quotes here. No fake or composite
-// testimonials — the testimonials section stays hidden until this has entries.
-export const testimonials = [];
+export const bookingLevels = [
+  { name: "Link to your booking app", text: "A Book button that opens Booksy, Square, Vagaro, or similar.", where: "Premium" },
+  { name: "Embedded booking widget", text: "Your booking service's widget shown on your page.", where: "Premium" },
+  { name: "Your own booking system", text: "Custom calendar, rules, and payments built for you.", where: "Quoted separately" },
+];
+
+export const carePlans = [
+  {
+    label: "Basic Care",
+    price: "$78",
+    period: "/month",
+    included: ["Small content updates", "Text and image changes", "Basic technical monitoring", "Monthly website check"],
+  },
+  {
+    label: "Growth Care",
+    price: "$138",
+    period: "/month",
+    included: [
+      "Everything in Basic Care",
+      "Regular content updates",
+      "New sections when needed",
+      "Basic SEO and content help",
+      "Priority support",
+    ],
+  },
+];
+
+export const steps = [
+  {
+    title: "Tell me about your business",
+    text: "Fill out the short form or send a message. A few sentences are enough to start.",
+  },
+  {
+    title: "Get a clear quote",
+    text: "I suggest a package and confirm the price, what's included, and the timeline in writing.",
+  },
+  {
+    title: "Review a live preview",
+    text: "I design and build the site. You check it on your own phone and send edits by message.",
+  },
+  {
+    title: "Launch",
+    text: "We publish the site. Care plans are there if you want help afterward, but they're optional.",
+  },
+];
 
 export const faqs = [
   {
     question: "How much does a website cost?",
     answer:
-      "Starter is $399, Growth is $749, and Premium is $1,199. Every project begins with a required $149 upfront deposit.",
+      "Starter is $198, Business is $298, and Premium is $498. These are one-time prices for the scope listed in each package. Custom features like payments or your own booking system are quoted separately.",
+  },
+  {
+    question: "Do I have to pay monthly?",
+    answer:
+      "No. Care plans ($78/month or $138/month) are optional. You can buy a website without one and ask for updates later.",
   },
   {
     question: "How long does it take?",
     answer:
-      "Most websites are ready for review in 3-5 business days once I have your details and deposit.",
+      "A Starter site is usually ready for review in 3-5 business days once I have your content. Bigger sites take longer, and I'll give you a date before we start.",
   },
   {
-    question: "What is included?",
-    answer:
-      "You get a custom layout, mobile-ready build, business content setup, contact flow, and launch prep based on your package.",
+    question: "Do we need to get on a call?",
+    answer: "No. The whole project can happen by message or email. If you'd like a call, just ask.",
   },
   {
-    question: "Why is there a $149 deposit?",
+    question: "Can you add online booking?",
     answer:
-      "It reserves your spot, starts the project right away, and leaves the remaining balance for later.",
+      "Premium can link to or embed the booking service you already use, like Booksy or Square. A custom booking system of your own is quoted separately.",
   },
   {
-    question: "Can I update the website later?",
+    question: "Do I need hosting and a domain?",
     answer:
-      "Yes. You can request updates anytime or keep ongoing support through the monthly plan.",
+      "Yes. A website needs a domain and hosting to stay online. If you already have them, I can connect everything. If not, I'll help you choose a setup. Those fees go to the provider.",
   },
   {
-    question: "Do you provide maintenance?",
+    question: "Are the salon, barbershop, and spa sites real clients?",
     answer:
-      "Yes. Website Care is $99 per month and includes content updates, small changes, bug fixes, and priority support.",
-  },
-  {
-    question: "Do I need hosting?",
-    answer:
-      "No monthly hosting bill — I host your site on the Vercel Hobby plan for free. The only cost is your domain, typically $12-15/year through a registrar like Namecheap or Google Domains. I connect your domain during launch at no extra charge.",
-  },
-  {
-    question: "Can I use my own domain?",
-    answer:
-      "Yes. If you already own a domain, I can connect it during launch.",
+      "No. They are demo concepts that show what I can build for those businesses. Chess & Truck is a real client project.",
   },
 ];

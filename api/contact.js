@@ -30,7 +30,7 @@ const buildHtml = (data) => `
       <tbody>
         ${[
           ["Business name", data.businessName],
-          ["Website type", data.websiteType],
+          ["Interested in", data.websiteType],
           ["Current website", data.currentWebsite],
           ["Social media", data.socialLink],
           ["Services", data.services],
@@ -38,7 +38,7 @@ const buildHtml = (data) => `
           ["Timeline", data.timeline],
           ["Email", data.email],
           ["Phone", data.phone],
-          ["Notes", data.notes],
+          ["What they need", data.notes],
         ]
           .map(
             ([label, value]) => `
@@ -63,7 +63,7 @@ const buildText = (data) =>
     `New website request from ${data.businessName || "Site by Amin form"}`,
     "",
     `Business name: ${data.businessName || "-"}`,
-    `Website type: ${data.websiteType || "-"}`,
+    `Interested in: ${data.websiteType || "-"}`,
     `Current website: ${data.currentWebsite || "-"}`,
     `Social media: ${data.socialLink || "-"}`,
     `Services: ${data.services || "-"}`,
@@ -72,7 +72,7 @@ const buildText = (data) =>
     `Email: ${data.email || "-"}`,
     `Phone: ${data.phone || "-"}`,
     "",
-    "Notes:",
+    "What they need:",
     data.notes || "-",
   ].join("\n");
 
@@ -105,11 +105,15 @@ export default {
       notes: sanitize(payload.notes),
     };
 
-    if (!data.businessName || !data.websiteType || !data.email) {
+    if (!data.businessName || !data.email || !data.notes) {
       return Response.json(
-        { error: "Please fill in your business name, website type, and email." },
+        { error: "Please fill in your business name, email, and what you need." },
         { status: 400 }
       );
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      return Response.json({ error: "Please check your email address." }, { status: 400 });
     }
 
     const env = globalThis.process?.env ?? {};
@@ -121,7 +125,7 @@ export default {
       return Response.json(
         {
           error:
-            "The contact form is not configured yet. Please use email or message for now, or add RESEND_API_KEY and CONTACT_FROM_EMAIL in Vercel.",
+            "The form isn't available right now. Please email or WhatsApp me instead.",
         },
         { status: 500 }
       );
@@ -146,13 +150,13 @@ export default {
             }
           : undefined,
       }),
-    });
+    }).catch(() => null);
 
-    if (!resendResponse.ok) {
+    if (!resendResponse?.ok) {
       return Response.json(
         {
           error:
-            "The form could not be delivered right now. Please send an email or WhatsApp message instead.",
+            "Your request couldn't be delivered right now. Please email or WhatsApp me instead.",
         },
         { status: 502 }
       );
@@ -161,7 +165,7 @@ export default {
     return Response.json(
       {
         message:
-          "Thanks. Your request is in. I will reply by email or message after reviewing it.",
+          "Thanks, your request is in. I'll reply by email after I read it.",
       },
       { status: 200 }
     );

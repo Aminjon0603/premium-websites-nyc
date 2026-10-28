@@ -1,5 +1,11 @@
 {
   "installCommand": "npm install",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/work/chess-and-truck", "destination": "/index.html" }
+  ],
+  "redirects": [
+    { "source": "/work/chess-and-truck/", "destination": "/work/chess-and-truck", "permanent": true }
+  ]
 }

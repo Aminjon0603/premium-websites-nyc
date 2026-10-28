@@ -1,26 +1,18 @@
 # Site by Amin
 
-Sales website for Site by Amin, a premium website customization service for local service businesses.
+Sales website for Site by Amin, a website customization service for small businesses.
 
 ## What this project is
 
-This is a React + Vite landing page used to sell customized premium website systems for:
+React + Vite site for Site by Amin, a one-person web design service for NYC small businesses.
 
-- dental clinics
-- premium barbershops
-- spa and wellness brands
-- coaches, tutors, and experts
+Pages:
 
-The site includes:
+- `/` - home: hero, featured Chess & Truck project, demo concepts, pricing and care plans, process, about, FAQ, contact form
+- `/work/chess-and-truck` - Chess & Truck case study (rewritten to `index.html` in `vercel.json`)
 
-- hero and value proposition
-- trust and proof section
-- live demo cards
-- process and pricing sections
-- FAQ section
-- contact form with a Vercel function endpoint
-- custom OG preview for `sitebyamin.com`
-- Vercel-ready production setup
+All public copy and prices live in `src/siteContent.js`. Screenshots of real projects live in `public/work/`.
+The social preview `public/sitebyamin-og.png` is rendered from `public/og-preview.html` at 1200x630.
 
 ## Local development
 
@@ -63,6 +55,6 @@ Suggested setup:
 
 ## Contact used on the site
 
-- WhatsApp / Telegram: `+1 332 345 0632`
-- Instagram: `@aminjon0603`
+- WhatsApp: `+1 332 345 0632`
+- Instagram: `@sitebyamin`
 - Email: `amin2002abrorov@gmail.com`
