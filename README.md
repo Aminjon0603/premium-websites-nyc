@@ -56,5 +56,7 @@ Suggested setup:
 ## Contact used on the site
 
 - WhatsApp: `+1 332 345 0632`
+- PayPal: `amincr335@gmail.com`
+- Zelle: `(347) 876-7407` (Mukhammadamin Abrorov)
 - Instagram: `@sitebyamin`
 - Email: `amin2002abrorov@gmail.com`

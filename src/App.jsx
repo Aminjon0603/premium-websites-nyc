@@ -1,60 +1,65 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   bookingLevels,
   carePlans,
+  careTerms,
   caseStudy,
   contact,
   demos,
   faqs,
   featuredProject,
+  packageBase,
   packages,
+  paymentMethods,
   quotedSeparately,
   startingPrice,
   steps,
 } from "./siteContent";
+import { routeForPath, routes } from "./seo";
 
 const CASE_PATH = featuredProject.caseUrl;
+const emptySelection = { package: "", care: "", project: "" };
+const selectionLabels = { package: "Package", care: "Care plan", project: "Example you liked" };
 
-const pageMeta = {
-  home: {
-    title: "Websites for NYC Small Businesses from $198 | Site by Amin",
-    description:
-      "Clear, mobile-friendly websites for NYC salons, barbershops, cafes, local services, and education programs. One-time packages from $198. Optional care from $78/month. No calls needed.",
-    canonical: "https://sitebyamin.com/",
-  },
-  case: {
-    title: "Chess & Truck Case Study | Site by Amin",
-    description:
-      "How Amin designed and built the Chess & Truck website for kids' chess programs in NYC: pages, forms, Stripe checkout, email, launch controls, SEO, and deployment.",
-    canonical: "https://sitebyamin.com/work/chess-and-truck",
-  },
-};
-
-const normalizePath = (path) => (path.length > 1 ? path.replace(/\/+$/, "") : path);
-
+// Runtime safety net for client-side changes. The prerendered HTML already has these.
 function setMeta(route) {
-  const meta = pageMeta[route];
+  const meta = routes[route];
   document.title = meta.title;
   document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
   document.querySelector('link[rel="canonical"]')?.setAttribute("href", meta.canonical);
-  document.querySelector('meta[property="og:url"]')?.setAttribute("content", meta.canonical);
-  document.querySelector('meta[property="og:title"]')?.setAttribute("content", meta.title);
-  document.querySelector('meta[property="og:description"]')?.setAttribute("content", meta.description);
 }
 
-// Fades sections in as they scroll into view. Content stays visible when
-// JavaScript, IntersectionObserver, or motion is unavailable.
+const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Scrolls so the top of the form sits just under the sticky header, then moves
+// focus to the form itself (not an input) so phones don't open the keyboard.
+function goToForm() {
+  const form = document.getElementById("contact-form");
+  if (!form) return;
+  const header = document.querySelector(".site-header");
+  const offset = (header ? header.getBoundingClientRect().height : 0) + 12;
+  const top = form.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top: Math.max(top, 0), behavior: prefersReducedMotion() ? "auto" : "smooth" });
+  form.focus({ preventScroll: true });
+  if (window.location.hash !== "#contact") window.history.replaceState(null, "", "#contact");
+}
+
+// Fades sections in as they scroll into view. Anything already on screen, and
+// everything when JS or motion is unavailable, stays visible.
 function useReveal(routeKey) {
   useEffect(() => {
     const items = [...document.querySelectorAll(".reveal")];
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (reduceMotion || !("IntersectionObserver" in window)) {
+    if (prefersReducedMotion() || !("IntersectionObserver" in window)) {
       items.forEach((item) => item.classList.add("is-in"));
       return undefined;
     }
 
+    items.forEach((item) => {
+      if (item.getBoundingClientRect().top < window.innerHeight) item.classList.add("is-in");
+    });
     document.documentElement.classList.add("can-reveal");
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -67,7 +72,7 @@ function useReveal(routeKey) {
       { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
     );
 
-    items.forEach((item) => observer.observe(item));
+    items.filter((item) => !item.classList.contains("is-in")).forEach((item) => observer.observe(item));
     return () => observer.disconnect();
   }, [routeKey]);
 }
@@ -101,7 +106,7 @@ function SectionIndex({ number, label }) {
   );
 }
 
-function DeviceShots({ desktop, mobile, alt, priority = false, className = "" }) {
+function DeviceShots({ desktop, mobile, alt, title, priority = false, className = "", onZoom }) {
   const loading = priority ? "eager" : "lazy";
 
   return (
@@ -127,6 +132,144 @@ function DeviceShots({ desktop, mobile, alt, priority = false, className = "" })
           <img src={mobile} alt="" width="780" height="1688" loading={loading} decoding="async" />
         </div>
       ) : null}
+      {onZoom ? (
+        <button
+          type="button"
+          className="zoom-button"
+          onClick={() =>
+            onZoom({
+              title,
+              images: [
+                { label: "Desktop", src: desktop, alt },
+                ...(mobile ? [{ label: "Phone", src: mobile, alt: `${title} on a phone` }] : []),
+              ],
+            })
+          }
+        >
+          <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+            <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            <path d="m10.5 10.5 3 3M5 7h4M7 5v4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          View larger<span className="sr-only">: {title} screenshots</span>
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
+// Accessible screenshot viewer built on <dialog>: Esc and the Close button
+// close it, focus stays inside while open and returns to the trigger after.
+function LightboxContent({ data, onClose }) {
+  // On phones, open on the phone screenshot when there is one.
+  const [index, setIndex] = useState(() => (data.images.length > 1 && window.innerWidth < 600 ? 1 : 0));
+  const [zoomed, setZoomed] = useState(false);
+  const image = data.images[index];
+
+  return (
+    <div className="lightbox-inner">
+      <div className="lightbox-bar">
+        <h2 id="lightbox-title">{data.title}</h2>
+        <div className="lightbox-controls">
+          {data.images.length > 1 ? (
+            <div className="segmented" role="group" aria-label="Screenshot size">
+              {data.images.map((item, i) => (
+                <button
+                  type="button"
+                  key={item.label}
+                  aria-pressed={i === index}
+                  onClick={() => {
+                    setIndex(i);
+                    setZoomed(false);
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          ) : null}
+          <button type="button" className="lightbox-btn" aria-pressed={zoomed} onClick={() => setZoomed((z) => !z)}>
+            {zoomed ? "Fit to screen" : "Zoom in"}
+          </button>
+          <button type="button" className="lightbox-btn" onClick={onClose} autoFocus>
+            Close
+          </button>
+        </div>
+      </div>
+      <div className={`lightbox-stage ${zoomed ? "is-zoomed" : ""} ${image.label === "Phone" ? "is-phone" : ""}`}>
+        <img src={image.src} alt={image.alt} />
+      </div>
+    </div>
+  );
+}
+
+function Lightbox({ data, onClose }) {
+  const dialogRef = useRef(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (data && dialog && !dialog.open) dialog.showModal();
+    if (!data && dialog?.open) dialog.close();
+  }, [data]);
+
+  return (
+    <dialog
+      ref={dialogRef}
+      className="lightbox"
+      aria-labelledby="lightbox-title"
+      onClose={onClose}
+      onClick={(event) => {
+        if (event.target === dialogRef.current) onClose();
+      }}
+    >
+      {data ? <LightboxContent key={data.title} data={data} onClose={onClose} /> : null}
+    </dialog>
+  );
+}
+
+function CopyButton({ value, label }) {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  return (
+    <button type="button" className="copy-button" onClick={copy}>
+      {copied ? "Copied" : "Copy"}
+      <span className="sr-only"> {label}</span>
+      <span className="sr-only" aria-live="polite">
+        {copied ? `${label} copied` : ""}
+      </span>
+    </button>
+  );
+}
+
+function PaymentBlock() {
+  return (
+    <div className="payment reveal" aria-labelledby="payment-title">
+      <div className="payment-intro">
+        <p className="label">How to pay</p>
+        <h3 id="payment-title">PayPal or Zelle</h3>
+        <p>Pay only after you've seen the demo and we've agreed on the quote. The 50% deposit starts the work.</p>
+      </div>
+      <ul className="payment-list">
+        {paymentMethods.map((method) => (
+          <li key={method.name}>
+            <div>
+              <span className="payment-name">{method.name}</span>
+              <strong>{method.value}</strong>
+              <span className="payment-note">{method.note}</span>
+            </div>
+            <CopyButton value={method.value} label={`${method.name} ${method.value}`} />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -217,11 +360,20 @@ function Footer({ onHome }) {
   );
 }
 
-function ContactSection({ interest, setInterest }) {
+function ContactSection({ selection, setSelection }) {
   const [form, setForm] = useState({ businessName: "", email: "", need: "" });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState({ state: "idle", message: "" });
-  const fieldRefs = { businessName: useRef(null), email: useRef(null), need: useRef(null) };
+  const businessRef = useRef(null);
+  const emailRef = useRef(null);
+  const needRef = useRef(null);
+  const successRef = useRef(null);
+  const fieldRefs = { businessName: businessRef, email: emailRef, need: needRef };
+  const chosen = Object.entries(selection).filter(([, value]) => value);
+
+  useEffect(() => {
+    if (status.state === "success") successRef.current?.focus();
+  }, [status.state]);
 
   const validate = (values) => {
     const next = {};
@@ -260,8 +412,10 @@ function ContactSection({ interest, setInterest }) {
           businessName: form.businessName,
           email: form.email,
           notes: form.need,
-          preferredPackage: interest,
-          websiteType: interest || "Not specified",
+          preferredPackage: selection.package,
+          carePlan: selection.care,
+          exampleProject: selection.project,
+          websiteType: chosen.map(([, value]) => value).join(" + ") || "Not specified",
         }),
       });
       const payload = await response.json().catch(() => ({}));
@@ -275,7 +429,7 @@ function ContactSection({ interest, setInterest }) {
         message: payload.message || "Thanks, your request is in. I'll reply by email after I read it.",
       });
       setForm({ businessName: "", email: "", need: "" });
-      setInterest("");
+      setSelection(emptySelection);
     } catch (error) {
       setStatus({
         state: "error",
@@ -305,30 +459,11 @@ function ContactSection({ interest, setInterest }) {
           <h2 id="contact-title" className="display-lg">
             Tell me about <em>your business.</em>
           </h2>
-          <p className="lede">
-            Three quick fields. I'll read it and reply by email with a suggested package, the price, and next
-            steps. No call needed.
-          </p>
-
-          <div className="direct-links">
-            <p className="label">Prefer to message?</p>
-            <ExternalLink href={contact.whatsappLink} className="direct-link">
-              <span>WhatsApp</span>
-              <strong>{contact.phoneLabel}</strong>
-            </ExternalLink>
-            <ExternalLink href={contact.instagramLink} className="direct-link">
-              <span>Instagram</span>
-              <strong>{contact.instagramHandle}</strong>
-            </ExternalLink>
-            <a href={`mailto:${contact.email}`} className="direct-link">
-              <span>Email</span>
-              <strong>{contact.email}</strong>
-            </a>
-          </div>
+          <p className="lede">Three short fields. I'll reply by email with a suggested package, the price, and next steps.</p>
         </div>
 
         {status.state === "success" ? (
-          <div className="form-panel form-success reveal" role="status" tabIndex={-1} ref={(node) => node?.focus()}>
+          <div id="contact-form" className="form-panel form-success reveal" role="status" tabIndex={-1} ref={successRef}>
             <p className="label">Request sent</p>
             <h3>Thank you.</h3>
             <p>{status.message}</p>
@@ -337,16 +472,37 @@ function ContactSection({ interest, setInterest }) {
             </button>
           </div>
         ) : (
-          <form className="form-panel reveal" onSubmit={handleSubmit} noValidate aria-busy={status.state === "loading"}>
-            {interest ? (
-              <div className="interest-chip">
-                <span>
-                  <span className="label">Attached to your request</span>
-                  <strong>{interest}</strong>
-                </span>
-                <button type="button" onClick={() => setInterest("")} aria-label={`Remove ${interest} from request`}>
-                  Remove
-                </button>
+          <form
+            id="contact-form"
+            className="form-panel reveal"
+            onSubmit={handleSubmit}
+            noValidate
+            tabIndex={-1}
+            aria-labelledby="contact-title"
+            aria-busy={status.state === "loading"}
+          >
+            {chosen.length ? (
+              <div className="selection">
+                <p className="label">Attached to your request</p>
+                <ul>
+                  {chosen.map(([key, value]) => (
+                    <li key={key}>
+                      <span>
+                        <small>{selectionLabels[key]}</small>
+                        {value}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setSelection((current) => ({ ...current, [key]: "" }))}
+                        aria-label={`Remove ${value} from request`}
+                      >
+                        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+                          <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                        </svg>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ) : null}
 
@@ -374,7 +530,7 @@ function ContactSection({ interest, setInterest }) {
               <label htmlFor="field-need">What do you need?</label>
               <textarea
                 {...fieldProps("need")}
-                rows="5"
+                rows="4"
                 placeholder="What your business does, what the site should help with, and any site you like."
               />
               {errors.need ? (
@@ -394,20 +550,35 @@ function ContactSection({ interest, setInterest }) {
             </p>
           </form>
         )}
+
+        <div className="direct-links reveal">
+          <p className="label">Prefer to message? No call needed.</p>
+          <ExternalLink href={contact.whatsappLink} className="direct-link">
+            <span>WhatsApp</span>
+            <strong>{contact.phoneLabel}</strong>
+          </ExternalLink>
+          <ExternalLink href={contact.instagramLink} className="direct-link">
+            <span>Instagram</span>
+            <strong>{contact.instagramHandle}</strong>
+          </ExternalLink>
+          <a href={`mailto:${contact.email}`} className="direct-link">
+            <span>Email</span>
+            <strong>{contact.email}</strong>
+          </a>
+        </div>
       </div>
     </section>
   );
 }
 
-function HomePage({ interest, setInterest }) {
+function HomePage({ selection, setSelection, onZoom }) {
   const heroActionsRef = useRef(null);
   const [showBar, setShowBar] = useState(false);
 
-  const requestSimilar = (label) => {
-    setInterest(label);
-    const section = document.getElementById("contact");
-    section?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-    window.setTimeout(() => document.getElementById("field-businessName")?.focus({ preventScroll: true }), 450);
+  const choose = (key, value) => {
+    setSelection((current) => ({ ...current, [key]: value }));
+    // Wait for the chip to render so the scroll lands on the final layout.
+    window.requestAnimationFrame(() => window.requestAnimationFrame(goToForm));
   };
 
   useEffect(() => {
@@ -417,13 +588,12 @@ function HomePage({ interest, setInterest }) {
 
     let heroVisible = true;
     let contactVisible = false;
-    const sync = () => setShowBar(!heroVisible && !contactVisible);
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.target === hero) heroVisible = entry.isIntersecting;
         if (entry.target === contactSection) contactVisible = entry.isIntersecting;
       });
-      sync();
+      setShowBar(!heroVisible && !contactVisible);
     });
     observer.observe(hero);
     observer.observe(contactSection);
@@ -446,9 +616,8 @@ function HomePage({ interest, setInterest }) {
                 Websites that make your <em>small business</em> easy to choose.
               </h1>
               <p className="lede hero-lede">
-                I'm Amin, a web designer in New York. I build clear, mobile-friendly sites for salons,
-                barbershops, cafes, local services, and education programs, so customers can see what you
-                offer and reach you in a tap.
+                I'm Amin, a New York web designer. I build clear, phone-friendly sites for salons, barbershops,
+                cafes, and local services, and we can do the whole project by message.
               </p>
               <div className="hero-actions" ref={heroActionsRef}>
                 <a className="btn btn-primary" href="#contact">
@@ -479,7 +648,9 @@ function HomePage({ interest, setInterest }) {
                 desktop={featuredProject.images.desktop}
                 mobile={featuredProject.images.mobile}
                 alt="Chess & Truck homepage on desktop and phone, a website built by Amin"
+                title="Chess & Truck homepage"
                 priority
+                onZoom={onZoom}
               />
               <figcaption>
                 <span className="label">Featured project</span>
@@ -501,25 +672,35 @@ function HomePage({ interest, setInterest }) {
             </p>
           </div>
 
-          <div className="featured-grid">
-            <div className="featured-copy reveal">
+          <div className="project-row">
+            <div className="project-media reveal">
+              <DeviceShots
+                desktop={featuredProject.images.programsDesktop}
+                mobile={featuredProject.images.programsMobile}
+                alt="Chess & Truck programs section showing four programs, each marked Registration Opening Soon"
+                title="Chess & Truck programs"
+                onZoom={onZoom}
+              />
+            </div>
+            <div className="project-copy reveal">
               <h2 id="featured-title" className="display-lg">
                 Chess &amp; <em>Truck</em>
               </h2>
-              <p className="lede">{featuredProject.summary}</p>
-              <dl className="spec-table">
-                {featuredProject.facts.map(([label, value]) => (
-                  <div key={label}>
-                    <dt>{label}</dt>
-                    <dd>{value}</dd>
-                  </div>
+              <p className="lede">{featuredProject.summary} I designed and built it, from the pages to the launch.</p>
+              <ol className="benefits">
+                {featuredProject.benefits.map((benefit, i) => (
+                  <li key={benefit.title}>
+                    <span>{String(i + 1).padStart(2, "0")}</span>
+                    <div>
+                      <strong>{benefit.title}</strong>
+                      <p>{benefit.text}</p>
+                    </div>
+                  </li>
                 ))}
-              </dl>
-              <ul className="check-list">
-                {featuredProject.highlights.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
+              </ol>
+              <p className="status-line">
+                <span aria-hidden="true" /> {featuredProject.status}
+              </p>
               <div className="button-row">
                 <a className="btn btn-primary" href={CASE_PATH}>
                   Read the case study <ArrowIcon />
@@ -528,15 +709,6 @@ function HomePage({ interest, setInterest }) {
                   Visit the live site <ArrowIcon external />
                 </ExternalLink>
               </div>
-            </div>
-
-            <div className="featured-media reveal">
-              <DeviceShots
-                desktop={featuredProject.images.programsDesktop}
-                mobile={featuredProject.images.programsMobile}
-                alt="Chess & Truck programs section showing four programs, each marked Registration Opening Soon"
-              />
-              <p className="media-note">{featuredProject.status}</p>
             </div>
           </div>
         </div>
@@ -552,18 +724,18 @@ function HomePage({ interest, setInterest }) {
               Demo sites for <em>local businesses.</em>
             </h2>
             <p>
-              These are concepts I designed and built to show what a site for your type of business could look
-              like. They are not client projects. Click through, they're live.
+              Concepts I designed and built to show what a site for your type of business could look like. They
+              are not client projects, and each one is live to click through.
             </p>
           </div>
 
           <ol className="work-list">
             {demos.map((demo, index) => (
-              <li className="work-item reveal" key={demo.id}>
-                <ExternalLink href={demo.demoUrl} className="work-media">
-                  <DeviceShots desktop={demo.desktop} mobile={demo.mobile} alt={demo.alt} />
-                </ExternalLink>
-                <div className="work-copy">
+              <li className="project-row work-item reveal" key={demo.id}>
+                <div className="project-media">
+                  <DeviceShots desktop={demo.desktop} mobile={demo.mobile} alt={demo.alt} title={`${demo.title} demo`} onZoom={onZoom} />
+                </div>
+                <div className="project-copy">
                   <p className="work-kicker">
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     <span className="tag">{demo.label}</span>
@@ -580,7 +752,7 @@ function HomePage({ interest, setInterest }) {
                     <ExternalLink href={demo.demoUrl} className="btn btn-ghost btn-small">
                       View demo <ArrowIcon external />
                     </ExternalLink>
-                    <button type="button" className="btn btn-link" onClick={() => requestSimilar(demo.formContext)}>
+                    <button type="button" className="btn btn-link" onClick={() => choose("project", demo.formContext)}>
                       I want a site like this <ArrowIcon />
                     </button>
                   </div>
@@ -601,9 +773,18 @@ function HomePage({ interest, setInterest }) {
               One-time prices. <em>No surprises.</em>
             </h2>
             <p>
-              Pick the size that fits today. Every site is designed around your business, works on phones, and
-              comes with a written quote before any work starts.
+              Pick the size that fits today. You get a written quote before any work starts. Domain and hosting
+              fees are paid separately to the provider.
             </p>
+          </div>
+
+          <div className="package-base reveal">
+            <p className="label">Every package includes</p>
+            <ul>
+              {packageBase.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </div>
 
           <div className="price-table reveal">
@@ -619,21 +800,55 @@ function HomePage({ interest, setInterest }) {
                 </p>
                 <p className="price-fit">{pkg.fit}</p>
                 <p className="price-pages">{pkg.pages}</p>
+                {pkg.addsLabel ? <p className="adds-label">{pkg.addsLabel}</p> : null}
                 <ul className="check-list">
-                  {pkg.included.map((item) => (
+                  {pkg.adds.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
+                {pkg.notIncluded ? <p className="price-excluded">{pkg.notIncluded}</p> : null}
                 <p className="price-timing">{pkg.timing}</p>
                 <button
                   type="button"
                   className={`btn ${pkg.recommended ? "btn-primary" : "btn-outline"} btn-block`}
-                  onClick={() => requestSimilar(`${pkg.label} package (${pkg.price})`)}
+                  aria-pressed={selection.package === `${pkg.label} (${pkg.price})`}
+                  onClick={() => choose("package", `${pkg.label} (${pkg.price})`)}
                 >
-                  Ask about {pkg.label}
+                  {selection.package === `${pkg.label} (${pkg.price})` ? `${pkg.label} selected` : `Ask about ${pkg.label}`}
                 </button>
               </article>
             ))}
+          </div>
+
+          <div className="care reveal" aria-labelledby="care-title">
+            <div className="care-intro">
+              <p className="label">Optional add-on</p>
+              <h3 id="care-title">Website care</h3>
+              <p>
+                Your site works without it. Add a plan to any package if you'd rather hand off updates after launch.
+              </p>
+              <p className="care-terms">{careTerms}</p>
+            </div>
+            {carePlans.map((plan) => {
+              const value = `${plan.label} (${plan.price}${plan.period})`;
+              return (
+                <div className="care-plan" key={plan.label}>
+                  <h4>{plan.label}</h4>
+                  <p className="price price-sm">
+                    {plan.price}
+                    <span>{plan.period}</span>
+                  </p>
+                  <ul className="check-list">
+                    {plan.included.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                  <button type="button" className="btn btn-link" aria-pressed={selection.care === value} onClick={() => choose("care", value)}>
+                    {selection.care === value ? `${plan.label} added` : `Add ${plan.label} to my request`} <ArrowIcon />
+                  </button>
+                </div>
+              );
+            })}
           </div>
 
           <div className="pricing-extras">
@@ -662,33 +877,7 @@ function HomePage({ interest, setInterest }) {
             </div>
           </div>
 
-          <div className="care reveal" aria-labelledby="care-title">
-            <div className="care-intro">
-              <p className="label">Add-on</p>
-              <h3 id="care-title">Website care</h3>
-              <p>
-                Optional. Your site works without it. Choose a plan if you'd rather hand off updates after
-                launch.
-              </p>
-            </div>
-            {carePlans.map((plan) => (
-              <div className="care-plan" key={plan.label}>
-                <h4>{plan.label}</h4>
-                <p className="price price-sm">
-                  {plan.price}
-                  <span>{plan.period}</span>
-                </p>
-                <ul className="check-list">
-                  {plan.included.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-                <button type="button" className="btn btn-link" onClick={() => requestSimilar(`${plan.label} (${plan.price}${plan.period})`)}>
-                  Ask about {plan.label} <ArrowIcon />
-                </button>
-              </div>
-            ))}
-          </div>
+          <PaymentBlock />
         </div>
       </section>
 
@@ -701,7 +890,7 @@ function HomePage({ interest, setInterest }) {
             <h2 id="process-title" className="display-md">
               Four steps, <em>all in writing.</em>
             </h2>
-            <p>You can answer when it suits you, and every decision stays in one thread.</p>
+            <p>No calls needed. You answer when it suits you, and every decision stays in one thread.</p>
           </div>
           <ol className="steps">
             {steps.map((step, index) => (
@@ -726,8 +915,8 @@ function HomePage({ interest, setInterest }) {
               Hi, I'm Amin. <em>You'll work with me directly.</em>
             </h2>
             <p className="lede">
-              I live in New York and build websites for small businesses here. I'm not an agency. The person
-              you message is the person who designs your site and writes the code.
+              I live in New York and build websites for small businesses here. I'm not an agency. The person you
+              message is the person who designs your site and writes the code.
             </p>
             <ul className="about-points">
               <li>
@@ -763,7 +952,7 @@ function HomePage({ interest, setInterest }) {
         </div>
       </section>
 
-      <ContactSection interest={interest} setInterest={setInterest} />
+      <ContactSection selection={selection} setSelection={setSelection} />
 
       <div className={`mobile-bar ${showBar ? "is-visible" : ""}`} aria-hidden={!showBar}>
         <a className="btn btn-primary btn-block" href="#contact" tabIndex={showBar ? 0 : -1}>
@@ -774,7 +963,7 @@ function HomePage({ interest, setInterest }) {
   );
 }
 
-function CasePage() {
+function CasePage({ onZoom }) {
   const p = featuredProject;
 
   return (
@@ -817,7 +1006,9 @@ function CasePage() {
             desktop={p.images.desktop}
             mobile={p.images.mobile}
             alt="Chess & Truck homepage on desktop and phone"
+            title="Chess & Truck homepage"
             priority
+            onZoom={onZoom}
           />
         </div>
       </header>
@@ -850,33 +1041,10 @@ function CasePage() {
         </div>
       </section>
 
-      <section className="section case-section" aria-labelledby="case-work">
-        <div className="container case-row reveal">
-          <SectionIndex number="03" label="What I built" />
-          <div>
-            <h2 id="case-work" className="display-sm">
-              The work behind the pages.
-            </h2>
-            <div className="work-groups">
-              {caseStudy.work.map((group) => (
-                <div key={group.title}>
-                  <h3>{group.title}</h3>
-                  <ul className="dash-list">
-                    {group.items.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="section case-section" aria-labelledby="case-features">
         <div className="container">
           <div className="case-row reveal">
-            <SectionIndex number="04" label="Key features" />
+            <SectionIndex number="03" label="Key features" />
             <h2 id="case-features" className="display-sm">
               What parents see.
             </h2>
@@ -884,7 +1052,7 @@ function CasePage() {
           <div className="feature-list">
             {caseStudy.features.map((feature) => (
               <figure className="feature reveal" key={feature.title}>
-                <DeviceShots desktop={feature.image} alt={feature.alt} />
+                <DeviceShots desktop={feature.image} alt={feature.alt} title={feature.title} onZoom={onZoom} />
                 <figcaption>
                   <h3>{feature.title}</h3>
                   <p>{feature.text}</p>
@@ -905,6 +1073,29 @@ function CasePage() {
                 <p>Most parents check on a phone. Text, buttons, and the menu are sized for one-handed use.</p>
               </figcaption>
             </figure>
+          </div>
+        </div>
+      </section>
+
+      <section className="section case-section" aria-labelledby="case-work">
+        <div className="container case-row reveal">
+          <SectionIndex number="04" label="Technical details" />
+          <div>
+            <h2 id="case-work" className="display-sm">
+              The work behind the pages.
+            </h2>
+            <div className="work-groups">
+              {caseStudy.work.map((group) => (
+                <div key={group.title}>
+                  <h3>{group.title}</h3>
+                  <ul className="dash-list">
+                    {group.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -944,14 +1135,12 @@ function CasePage() {
   );
 }
 
-function App() {
-  const path = normalizePath(window.location.pathname);
-  const route = path === CASE_PATH ? "case" : "home";
+function App({ path = "/" }) {
+  const route = routeForPath(path);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [interest, setInterest] = useState(() => {
-    const value = new URLSearchParams(window.location.search).get("interest");
-    return value === featuredProject.id ? featuredProject.formContext : "";
-  });
+  const [selection, setSelection] = useState(emptySelection);
+  const [lightbox, setLightbox] = useState(null);
+  const closeLightbox = useCallback(() => setLightbox(null), []);
 
   useReveal(route);
 
@@ -967,15 +1156,36 @@ function App() {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, []);
 
+  // Read ?interest= from the case page link, then land on the form. Runs after
+  // the first paint so the prerendered markup hydrates without a mismatch.
   useEffect(() => {
-    // Drop the ?interest= param once it has been read, keeping the hash.
+    const interest = new URLSearchParams(window.location.search).get("interest");
+    const hash = window.location.hash;
     if (window.location.search) {
-      window.history.replaceState(null, "", `${window.location.pathname}${window.location.hash}`);
+      window.history.replaceState(null, "", `${window.location.pathname}${hash}`);
     }
-    if (window.location.hash) {
-      document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
-    }
+    // Not cancelled on cleanup: in dev StrictMode the second run no longer sees the query.
+    window.requestAnimationFrame(() => {
+      if (interest === featuredProject.id) {
+        setSelection((current) => ({ ...current, project: featuredProject.formContext }));
+      }
+      if (hash === "#contact") window.requestAnimationFrame(goToForm);
+      else if (hash) document.getElementById(hash.slice(1))?.scrollIntoView();
+    });
   }, []);
+
+  // Every in-page link to #contact lands on the start of the form, not the section intro.
+  useEffect(() => {
+    if (route !== "home") return undefined;
+    const onClick = (event) => {
+      const link = event.target.closest?.('a[href="#contact"]');
+      if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
+      event.preventDefault();
+      window.requestAnimationFrame(goToForm);
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, [route]);
 
   return (
     <>
@@ -984,9 +1194,14 @@ function App() {
       </a>
       <Header onHome={route === "home"} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <main id="main-content">
-        {route === "case" ? <CasePage /> : <HomePage interest={interest} setInterest={setInterest} />}
+        {route === "case" ? (
+          <CasePage onZoom={setLightbox} />
+        ) : (
+          <HomePage selection={selection} setSelection={setSelection} onZoom={setLightbox} />
+        )}
       </main>
       <Footer onHome={route === "home"} />
+      <Lightbox data={lightbox} onClose={closeLightbox} />
     </>
   );
 }

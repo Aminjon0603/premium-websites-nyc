@@ -122,8 +122,8 @@
     <div class="frame">
       <div>
         <div class="brand">Site by <em>Amin</em></div>
-        <h1>Websites for NYC <em>small businesses.</em></h1>
-        <div class="facts">
+        <h1 id="og-title">Websites for NYC <em>small businesses.</em></h1>
+        <div class="facts" id="og-facts">
           <span>From $198 one-time</span>
           <span>No calls needed</span>
         </div>
@@ -136,5 +136,13 @@
         <div class="phone"><img src="/work/chess-truck-home-mobile.webp" alt="" /></div>
       </div>
     </div>
+    <script>
+      // ?v=case renders og-chess-and-truck.png for the case study page.
+      if (new URLSearchParams(location.search).get("v") === "case") {
+        document.getElementById("og-title").innerHTML = "Chess &amp; Truck <em>case study.</em>";
+        document.getElementById("og-facts").innerHTML =
+          "<span>NYC kids' chess programs</span><span>Design &amp; build</span>";
+      }
+    </script>
   </body>
 </html>

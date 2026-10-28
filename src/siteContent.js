@@ -12,6 +12,12 @@ export const contact = {
 
 export const startingPrice = "$198";
 
+// Shown in the pricing section. Payment is only taken after the demo and an agreed quote.
+export const paymentMethods = [
+  { name: "PayPal", value: "amincr335@gmail.com", note: "Send to this email" },
+  { name: "Zelle", value: "(347) 876-7407", note: "Recipient: Mukhammadamin Abrorov" },
+];
+
 export const featuredProject = {
   id: "chess-and-truck",
   name: "Chess & Truck",
@@ -19,18 +25,27 @@ export const featuredProject = {
   caseUrl: "/work/chess-and-truck",
   summary: "A multi-page website for kids' chess programs in New York City.",
   status: "Website developed and published. Program registration is opening soon.",
-  formContext: "Project like Chess & Truck",
+  formContext: "Chess & Truck (real project)",
   facts: [
     ["Client", "Chess & Truck, New York City"],
     ["Business", "Chess camps, tournaments, lessons, and after-school programs for kids"],
     ["My role", "Website design and development, integrations, testing, and deployment"],
     ["Status", "Published. Registration opening soon"],
   ],
-  highlights: [
-    "Separate pages for Camps, Tournaments, Private Lessons, and After-School",
-    "Phone-friendly layout and menu, with motion that respects reduced-motion settings",
-    "Stripe checkout and email confirmations, built and locked until programs open",
-    "Search basics: sitemap, canonical links, and social previews",
+  // Short, business-facing points for the homepage. Technical detail lives on the case page.
+  benefits: [
+    {
+      title: "Every program is easy to find",
+      text: "Camps, tournaments, private lessons, and after-school each get a clear card and their own page.",
+    },
+    {
+      title: "Made for parents on phones",
+      text: "Big text, simple menu, and contact options that work with one hand.",
+    },
+    {
+      title: "Ready for opening day",
+      text: "Registration and online payments are set up and stay switched off until programs open.",
+    },
   ],
   images: {
     desktop: "/work/chess-truck-home-desktop.webp",
@@ -73,7 +88,7 @@ export const caseStudy = {
       title: "Payments and launch control",
       items: [
         "Server API routes on Vercel",
-        "Stripe Checkout, a webhook, and a payment status check",
+        "Stripe Checkout, a webhook, and a payment status check, prepared for when programs open",
         "A launch gate that blocks registration and payments until a program is approved and open",
       ],
     },
@@ -81,7 +96,7 @@ export const caseStudy = {
       title: "Notify-me list",
       items: [
         "Supabase-based sign-up list with email confirmation, unsubscribe links, and access protection",
-        "Built and tested, but not switched on for visitors yet",
+        "Prepared and tested, but not switched on for visitors yet",
       ],
     },
     {
@@ -124,14 +139,14 @@ export const demos = [
     id: "salon",
     label: "Demo concept",
     business: "Beauty salon",
-    title: "Simple Everyday Salon",
-    problem: "Puts prices, hours, and a booking button on the first screen, so clients don't have to call to ask.",
-    features: ["Service menu with prices", "Hours and location up front", "Booking and call buttons"],
+    title: "Maple & Main Salon",
+    problem: "Puts prices, hours, and the phone number on the first screen, so clients don't have to call just to ask.",
+    features: ["Service menu with prices", "Hours and address up front", "Call-to-book and directions buttons"],
     demoUrl: "https://simple-everyday-salon.vercel.app/",
     desktop: "/work/salon-desktop.webp",
     mobile: "/work/salon-mobile.webp",
-    alt: "Homepage of the Simple Everyday Salon demo website",
-    formContext: "Salon website (like the salon demo)",
+    alt: "Homepage of the Maple & Main Salon demo website",
+    formContext: "Maple & Main Salon demo",
   },
   {
     id: "barber",
@@ -144,64 +159,76 @@ export const demos = [
     desktop: "/work/barber-desktop.webp",
     mobile: "/work/barber-mobile.webp",
     alt: "Homepage of the barbershop demo website with storefront photos",
-    formContext: "Barbershop website (like the barbershop demo)",
+    formContext: "Barbershop demo",
   },
   {
     id: "spa",
     label: "Demo concept",
     business: "Spa and wellness",
     title: "Luxury spa",
-    problem: "Gives a calm, premium first impression and a short path to directions or an inquiry.",
-    features: ["Service highlights", "Space and story sections", "Visit and inquiry buttons"],
+    problem: "A visual style study: a warm, calm look for a spa or wellness studio, with treatments, a visit section, and FAQ.",
+    features: ["Treatment cards", "Visit steps", "Call and directions buttons", "FAQ"],
     demoUrl: "https://luxury-spa-demo.vercel.app/",
     desktop: "/work/spa-desktop.webp",
     mobile: "/work/spa-mobile.webp",
     alt: "Homepage of the luxury spa demo website",
-    formContext: "Spa or wellness website (like the spa demo)",
+    formContext: "Luxury spa demo",
   },
 ];
 
+// Included in every package.
+export const packageBase = [
+  "Mobile-friendly design",
+  "Contact form",
+  "Your logo, text, and photos",
+  "A quick demo before you pay",
+  "The whole project by message",
+];
+
+// Each package lists only what it adds on top of the one before it.
 export const packages = [
   {
     label: "Starter",
     price: "$198",
-    fit: "You need one clear page that explains what you do and how to reach you.",
+    fit: "One clear page that explains what you do and how to reach you.",
     pages: "1 page",
-    included: ["Mobile-friendly design", "Contact form", "Your logo, text, and photos"],
+    adds: ["Clean, simple design"],
+    notIncluded: "Domain connection not included",
     timing: "Usually ready for review in 3-5 business days once I have your content.",
   },
   {
     label: "Business",
     price: "$298",
-    fit: "You want separate pages for services, about, and contact.",
+    fit: "Separate pages for your services, about, and contact.",
     pages: "Up to 5 pages",
-    included: ["Custom design", "Contact or lead form", "Basic SEO setup", "Domain connection", "Mobile-friendly design"],
+    addsLabel: "Everything in Starter, plus",
+    adds: ["Custom design", "Contact or lead form", "Basic SEO setup", "Domain connection"],
     timing: "I'll give you a date once I see your pages and content.",
     recommended: true,
   },
   {
     label: "Premium",
     price: "$498",
-    fit: "You have more to show, like a full service menu, a catalog, or a booking app.",
+    fit: "More to show, like a full service menu, a catalog, or a booking app.",
     pages: "Up to 10 pages",
-    included: [
+    addsLabel: "Everything in Business, plus",
+    adds: [
       "Advanced custom design",
       "Booking: link or embed the booking service you already use",
       "Or a catalog or menu page (no online checkout)",
       "Basic analytics setup",
-      "Basic SEO setup",
-      "Priority support",
+      "Priority support: faster turnaround on edits",
     ],
     timing: "I'll give you a date once I see your pages and content.",
   },
 ];
 
 export const quotedSeparately = [
+  "Domain and hosting fees, paid to the provider",
   "Your own booking or registration system",
   "Online payments and checkout",
   "Customer accounts, databases, and email automation",
   "Other third-party integrations",
-  "Domain and hosting fees, paid to the provider",
 ];
 
 export const bookingLevels = [
@@ -226,10 +253,12 @@ export const carePlans = [
       "Regular content updates",
       "New sections when needed",
       "Basic SEO and content help",
-      "Priority support",
+      "Priority support: faster turnaround on edits",
     ],
   },
 ];
+
+export const careTerms = "Both plans: one edit request per day. Replies can take 24 hours or more.";
 
 export const steps = [
   {
@@ -237,12 +266,12 @@ export const steps = [
     text: "Fill out the short form or send a message. A few sentences are enough to start.",
   },
   {
-    title: "Get a clear quote",
-    text: "I suggest a package and confirm the price, what's included, and the timeline in writing.",
+    title: "See a quick demo",
+    text: "I put together a rough demo so you can see the direction, plus the price and what's included. It's only a demo, and you don't pay for it.",
   },
   {
-    title: "Review a live preview",
-    text: "I design and build the site. You check it on your own phone and send edits by message.",
+    title: "50% deposit, then the build",
+    text: "Full work starts after a 50% deposit by PayPal or Zelle. I build the site, you check it on your phone and send edits by message.",
   },
   {
     title: "Launch",
@@ -255,6 +284,16 @@ export const faqs = [
     question: "How much does a website cost?",
     answer:
       "Starter is $198, Business is $298, and Premium is $498. These are one-time prices for the scope listed in each package. Custom features like payments or your own booking system are quoted separately.",
+  },
+  {
+    question: "Do I pay before you start?",
+    answer:
+      "You see a quick demo first, and you don't pay for it. If you want to go ahead, full work starts after a 50% deposit.",
+  },
+  {
+    question: "How do I pay?",
+    answer:
+      "By PayPal (amincr335@gmail.com) or Zelle ((347) 876-7407, recipient Mukhammadamin Abrorov). Please pay only after we've agreed on the quote.",
   },
   {
     question: "Do I have to pay monthly?",
