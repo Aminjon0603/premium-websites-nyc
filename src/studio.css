@@ -1111,8 +1111,12 @@ ol {
   background: currentColor;
 }
 
-.price-timing {
+/* Timing sits right under the list; the button stays aligned at the bottom. */
+.price-col > .btn {
   margin-top: auto;
+}
+
+.price-timing {
   padding-bottom: 20px;
   font-size: 0.88rem;
   opacity: 0.75;
@@ -1223,6 +1227,81 @@ ol {
 
 .care-plan .btn-link {
   color: var(--gold-ink);
+}
+
+.extras {
+  margin-top: clamp(32px, 4vw, 48px);
+}
+
+.extras-note {
+  max-width: 52em;
+  color: var(--ink-muted);
+}
+
+/* Shared look for the collapsible "more detail" blocks. */
+.extras-details,
+.tech-details {
+  margin-top: 14px;
+  border-top: 1px solid var(--ink-line);
+  border-bottom: 1px solid var(--ink-line);
+}
+
+.tech-details {
+  margin-top: 28px;
+  border-color: var(--line);
+}
+
+.extras-details > summary,
+.tech-details > summary,
+.more-faqs > summary {
+  position: relative;
+  padding: 16px 40px 16px 0;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.extras-details > summary::-webkit-details-marker,
+.tech-details > summary::-webkit-details-marker,
+.more-faqs > summary::-webkit-details-marker {
+  display: none;
+}
+
+.extras-details > summary::before,
+.extras-details > summary::after,
+.tech-details > summary::before,
+.tech-details > summary::after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  width: 14px;
+  height: 1.5px;
+  background: var(--gold-ink);
+  transition: transform 0.25s ease;
+}
+
+.tech-details > summary::before,
+.tech-details > summary::after {
+  background: var(--gold);
+}
+
+.extras-details > summary::after,
+.tech-details > summary::after {
+  transform: rotate(90deg);
+}
+
+.extras-details[open] > summary::after,
+.tech-details[open] > summary::after {
+  transform: rotate(0deg);
+}
+
+.extras-details .pricing-extras {
+  margin: 8px 0 24px;
+}
+
+.tech-details .work-groups {
+  margin: 8px 0 24px;
 }
 
 .payment {
@@ -1356,8 +1435,8 @@ ol {
 
 .about-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
-  gap: clamp(36px, 6vw, 96px);
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
   align-items: center;
 }
 
@@ -1370,22 +1449,6 @@ ol {
 
 .about-copy .display-md {
   margin: 20px 0 22px;
-}
-
-.about-points {
-  margin-top: 32px;
-  border-top: 1px solid var(--line);
-}
-
-.about-points li {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--line);
-  color: var(--muted);
-}
-
-.about-points strong {
-  color: var(--text);
-  font-weight: 600;
 }
 
 /* FAQ */
@@ -1444,6 +1507,17 @@ ol {
 .faq-list details p {
   padding: 0 48px 24px 0;
   color: var(--muted);
+}
+
+.faq-list .more-faqs > summary {
+  color: var(--gold);
+  font-size: 1rem;
+}
+
+.more-faq h3 {
+  margin-bottom: 6px;
+  font-size: 1.02rem;
+  font-weight: 500;
 }
 
 /* Contact */
@@ -1982,7 +2056,7 @@ ol {
   }
 
   .about-photo {
-    max-width: 420px;
+    max-width: 280px;
   }
 
   .footer-grid {

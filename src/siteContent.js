@@ -30,22 +30,12 @@ export const featuredProject = {
     ["Client", "Chess & Truck, New York City"],
     ["Business", "Chess camps, tournaments, lessons, and after-school programs for kids"],
     ["My role", "Website design and development, integrations, testing, and deployment"],
-    ["Status", "Published. Registration opening soon"],
   ],
   // Short, business-facing points for the homepage. Technical detail lives on the case page.
   benefits: [
-    {
-      title: "Every program is easy to find",
-      text: "Camps, tournaments, private lessons, and after-school each get a clear card and their own page.",
-    },
-    {
-      title: "Made for parents on phones",
-      text: "Big text, simple menu, and contact options that work with one hand.",
-    },
-    {
-      title: "Ready for opening day",
-      text: "Registration and online payments are set up and stay switched off until programs open.",
-    },
+    "Each of the four programs has its own page",
+    "Easy to read and use on a phone",
+    "Registration and payments ready, locked until programs open",
   ],
   images: {
     desktop: "/work/chess-truck-home-desktop.webp",
@@ -59,14 +49,8 @@ export const featuredProject = {
 // Details for the Chess & Truck case page. Checked against the project's code
 // (chess-and-truck-site) and the live site on 2026-10-27.
 export const caseStudy = {
-  task: [
-    "Chess & Truck runs chess programs for kids in New York City. Parents need to understand four different programs quickly, find answers to common questions, and get in touch.",
-    "The site also had to be ready to take registrations and payments once programs open, without letting anyone register or pay before then.",
-  ],
-  role: [
-    "I designed and built the website, set up the integrations, wrote the tests, and handled deployment and the domain.",
-    "Chess & Truck runs the programs. Program details and much of the homepage wording come from the Chess & Truck team.",
-  ],
+  task: "Parents should be able to compare four programs and get in touch quickly. The site also had to be ready for registration and payments, without letting anyone pay before programs open.",
+  role: "I designed and built the site, set up the integrations, and handled testing and deployment. Chess & Truck runs the programs and supplied the program details and much of the homepage wording.",
   work: [
     {
       title: "Pages and design",
@@ -114,24 +98,22 @@ export const caseStudy = {
   ],
   features: [
     {
-      title: "Four programs, one clear homepage",
-      text: "Each program gets its own card, status label, and page, so parents can go straight to the one they care about.",
+      title: "Four programs on one page",
+      text: "Each has a card, a status label, and its own page.",
       image: "/work/chess-truck-programs-desktop.webp",
       alt: "Chess & Truck homepage section listing four programs: Chess Camps, Chess Tournaments, Private Chess Lessons, and After-School Programs",
     },
     {
-      title: "Honest program pages",
-      text: "Program pages show what is planned and what is not announced yet, instead of placeholder dates or prices.",
+      title: "No made-up details",
+      text: "Dates and prices that aren't announced yet say so.",
       image: "/work/chess-truck-camps-desktop.webp",
       alt: "Chess & Truck camps page with a Registration Opening Soon label and a camp details panel",
     },
   ],
-  result: [
-    "The website is developed and published at chessandtruck.com.",
-    "Registration, payments, and the notify-me list stay switched off until Chess & Truck opens its programs. The first camp has not happened yet, so there are no sign-up or sales numbers to report.",
-  ],
+  result:
+    "Registration, payments, and the notify-me list stay switched off until programs open. The first camp hasn't happened yet, so there are no results to report.",
   pricingNote:
-    "A project like this is custom work. Payments, databases, and email automation are quoted after we talk about what you need. They are not part of a fixed package.",
+    "Custom work like payments, databases, and email automation is quoted separately. It isn't included in Premium ($498).",
 };
 
 export const demos = [
@@ -140,8 +122,8 @@ export const demos = [
     label: "Demo concept",
     business: "Beauty salon",
     title: "Maple & Main Salon",
-    problem: "Puts prices, hours, and the phone number on the first screen, so clients don't have to call just to ask.",
-    features: ["Service menu with prices", "Hours and address up front", "Call-to-book and directions buttons"],
+    problem: "Prices, hours, and the phone number right on the first screen.",
+    features: ["Service menu with prices", "Call-to-book button"],
     demoUrl: "https://simple-everyday-salon.vercel.app/",
     desktop: "/work/salon-desktop.webp",
     mobile: "/work/salon-mobile.webp",
@@ -153,8 +135,8 @@ export const demos = [
     label: "Demo concept",
     business: "Barbershop",
     title: "Neighborhood barbershop",
-    problem: "Shows the storefront, services, and daily hours, so walk-in customers know what to expect.",
-    features: ["Storefront photo gallery", "Services list", "Call and directions buttons", "English and Spanish versions"],
+    problem: "Walk-in customers see the shop, services, and hours before they come in.",
+    features: ["Storefront photos", "English and Spanish"],
     demoUrl: "https://mq-barber-shop.vercel.app/",
     desktop: "/work/barber-desktop.webp",
     mobile: "/work/barber-mobile.webp",
@@ -166,8 +148,8 @@ export const demos = [
     label: "Demo concept",
     business: "Spa and wellness",
     title: "Luxury spa",
-    problem: "A visual style study: a warm, calm look for a spa or wellness studio, with treatments, a visit section, and FAQ.",
-    features: ["Treatment cards", "Visit steps", "Call and directions buttons", "FAQ"],
+    problem: "A visual style study: a calm, warm look for a spa or wellness studio.",
+    features: ["Treatment cards", "FAQ"],
     demoUrl: "https://luxury-spa-demo.vercel.app/",
     desktop: "/work/spa-desktop.webp",
     mobile: "/work/spa-mobile.webp",
@@ -177,20 +159,14 @@ export const demos = [
 ];
 
 // Included in every package.
-export const packageBase = [
-  "Mobile-friendly design",
-  "Contact form",
-  "Your logo, text, and photos",
-  "A quick demo before you pay",
-  "The whole project by message",
-];
+export const packageBase = ["Mobile-friendly design", "Contact form", "Your logo, text, and photos", "Free demo first"];
 
 // Each package lists only what it adds on top of the one before it.
 export const packages = [
   {
     label: "Starter",
     price: "$198",
-    fit: "One clear page that explains what you do and how to reach you.",
+    fit: "A simple online presence.",
     pages: "1 page",
     adds: ["Clean, simple design"],
     notIncluded: "Domain connection not included",
@@ -199,29 +175,31 @@ export const packages = [
   {
     label: "Business",
     price: "$298",
-    fit: "Separate pages for your services, about, and contact.",
+    fit: "Separate pages for services, about, and contact.",
     pages: "Up to 5 pages",
     addsLabel: "Everything in Starter, plus",
-    adds: ["Custom design", "Contact or lead form", "Basic SEO setup", "Domain connection"],
-    timing: "I'll give you a date once I see your pages and content.",
+    adds: ["Custom design", "Lead form", "Basic SEO setup", "Domain connection"],
+    timing: "Date confirmed once I see your content.",
     recommended: true,
   },
   {
     label: "Premium",
     price: "$498",
-    fit: "More to show, like a full service menu, a catalog, or a booking app.",
+    fit: "A full service menu, catalog, or booking.",
     pages: "Up to 10 pages",
     addsLabel: "Everything in Business, plus",
     adds: [
       "Advanced custom design",
-      "Booking: link or embed the booking service you already use",
-      "Or a catalog or menu page (no online checkout)",
+      "Link or embed your booking app, or a catalog page",
       "Basic analytics setup",
       "Priority support: faster turnaround on edits",
     ],
-    timing: "I'll give you a date once I see your pages and content.",
+    timing: "Date confirmed once I see your content.",
   },
 ];
+
+export const quotedSeparatelyNote =
+  "Your own booking system, online payments, and other custom features are quoted separately. Domain and hosting fees go to the provider.";
 
 export const quotedSeparately = [
   "Domain and hosting fees, paid to the provider",
@@ -242,7 +220,7 @@ export const carePlans = [
     label: "Basic Care",
     price: "$78",
     period: "/month",
-    included: ["Small content updates", "Text and image changes", "Basic technical monitoring", "Monthly website check"],
+    included: ["Small text and image updates", "Basic technical monitoring", "Monthly website check"],
   },
   {
     label: "Growth Care",
@@ -250,8 +228,7 @@ export const carePlans = [
     period: "/month",
     included: [
       "Everything in Basic Care",
-      "Regular content updates",
-      "New sections when needed",
+      "Regular updates and new sections",
       "Basic SEO and content help",
       "Priority support: faster turnaround on edits",
     ],
@@ -260,68 +237,41 @@ export const carePlans = [
 
 export const careTerms = "Both plans: one edit request per day. Replies can take 24 hours or more.";
 
+// The process also carries the free demo and 50% deposit terms, so FAQ doesn't repeat them.
 export const steps = [
-  {
-    title: "Tell me about your business",
-    text: "Fill out the short form or send a message. A few sentences are enough to start.",
-  },
-  {
-    title: "See a quick demo",
-    text: "I put together a rough demo so you can see the direction, plus the price and what's included. It's only a demo, and you don't pay for it.",
-  },
-  {
-    title: "50% deposit, then the build",
-    text: "Full work starts after a 50% deposit by PayPal or Zelle. I build the site, you check it on your phone and send edits by message.",
-  },
-  {
-    title: "Launch",
-    text: "We publish the site. Care plans are there if you want help afterward, but they're optional.",
-  },
+  { title: "Tell me about your business", text: "Use the form or send a message." },
+  { title: "Get a free demo", text: "A rough first version, plus the price and what's included." },
+  { title: "50% deposit, then the build", text: "You review it on your phone and send edits by message." },
+  { title: "Launch", text: "We publish the site. Care is optional." },
 ];
 
 export const faqs = [
   {
     question: "How much does a website cost?",
-    answer:
-      "Starter is $198, Business is $298, and Premium is $498. These are one-time prices for the scope listed in each package. Custom features like payments or your own booking system are quoted separately.",
-  },
-  {
-    question: "Do I pay before you start?",
-    answer:
-      "You see a quick demo first, and you don't pay for it. If you want to go ahead, full work starts after a 50% deposit.",
-  },
-  {
-    question: "How do I pay?",
-    answer:
-      "By PayPal (amincr335@gmail.com) or Zelle ((347) 876-7407, recipient Mukhammadamin Abrorov). Please pay only after we've agreed on the quote.",
+    answer: "Starter is $198, Business $298, and Premium $498, one-time. Custom features are quoted separately.",
   },
   {
     question: "Do I have to pay monthly?",
-    answer:
-      "No. Care plans ($78/month or $138/month) are optional. You can buy a website without one and ask for updates later.",
+    answer: "No. Care plans are optional. You can ask for updates later without one.",
   },
   {
     question: "How long does it take?",
-    answer:
-      "A Starter site is usually ready for review in 3-5 business days once I have your content. Bigger sites take longer, and I'll give you a date before we start.",
+    answer: "A Starter site is usually ready for review in 3-5 business days once I have your content. For bigger sites, I'll give you a date before we start.",
   },
   {
     question: "Do we need to get on a call?",
     answer: "No. The whole project can happen by message or email. If you'd like a call, just ask.",
   },
   {
-    question: "Can you add online booking?",
-    answer:
-      "Premium can link to or embed the booking service you already use, like Booksy or Square. A custom booking system of your own is quoted separately.",
-  },
-  {
     question: "Do I need hosting and a domain?",
-    answer:
-      "Yes. A website needs a domain and hosting to stay online. If you already have them, I can connect everything. If not, I'll help you choose a setup. Those fees go to the provider.",
+    answer: "Yes. If you have them, I'll connect them (Business and Premium). If not, I'll help you choose. Those fees go to the provider.",
   },
+];
+
+// Shown under "More questions". Each adds something not covered above.
+export const moreFaqs = [
   {
     question: "Are the salon, barbershop, and spa sites real clients?",
-    answer:
-      "No. They are demo concepts that show what I can build for those businesses. Chess & Truck is a real client project.",
+    answer: "No. They are demo concepts. Chess & Truck is a real client project.",
   },
 ];

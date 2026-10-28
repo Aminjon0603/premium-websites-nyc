@@ -8,10 +8,12 @@ import {
   demos,
   faqs,
   featuredProject,
+  moreFaqs,
   packageBase,
   packages,
   paymentMethods,
   quotedSeparately,
+  quotedSeparatelyNote,
   startingPrice,
   steps,
 } from "./siteContent";
@@ -256,7 +258,7 @@ function PaymentBlock() {
       <div className="payment-intro">
         <p className="label">How to pay</p>
         <h3 id="payment-title">PayPal or Zelle</h3>
-        <p>Pay only after you've seen the demo and we've agreed on the quote. The 50% deposit starts the work.</p>
+        <p>For the 50% deposit, after the free demo and an agreed quote.</p>
       </div>
       <ul className="payment-list">
         {paymentMethods.map((method) => (
@@ -459,11 +461,13 @@ function ContactSection({ selection, setSelection }) {
           <h2 id="contact-title" className="display-lg">
             Tell me about <em>your business.</em>
           </h2>
-          <p className="lede">Three short fields. I'll reply by email with a suggested package, the price, and next steps.</p>
+          <p className="lede">Three short fields. I'll reply by email with a package and price.</p>
         </div>
 
+        {/* No "reveal" on these two panels: they swap after load, when useReveal
+            is no longer watching, so a new one would stay at opacity 0. */}
         {status.state === "success" ? (
-          <div id="contact-form" className="form-panel form-success reveal" role="status" tabIndex={-1} ref={successRef}>
+          <div id="contact-form" className="form-panel form-success" role="status" tabIndex={-1} ref={successRef}>
             <p className="label">Request sent</p>
             <h3>Thank you.</h3>
             <p>{status.message}</p>
@@ -474,7 +478,7 @@ function ContactSection({ selection, setSelection }) {
         ) : (
           <form
             id="contact-form"
-            className="form-panel reveal"
+            className="form-panel"
             onSubmit={handleSubmit}
             noValidate
             tabIndex={-1}
@@ -613,11 +617,10 @@ function HomePage({ selection, setSelection, onZoom }) {
           <div className="hero-grid">
             <div className="hero-copy">
               <h1 id="hero-title" className="display-xl">
-                Websites that make your <em>small business</em> easy to choose.
+                Clear websites for NYC <em>small businesses.</em>
               </h1>
               <p className="lede hero-lede">
-                I'm Amin, a New York web designer. I build clear, phone-friendly sites for salons, barbershops,
-                cafes, and local services, and we can do the whole project by message.
+                I'm Amin. I design and build sites for salons, barbershops, cafes, and local services, all by message.
               </p>
               <div className="hero-actions" ref={heroActionsRef}>
                 <a className="btn btn-primary" href="#contact">
@@ -686,15 +689,12 @@ function HomePage({ selection, setSelection, onZoom }) {
               <h2 id="featured-title" className="display-lg">
                 Chess &amp; <em>Truck</em>
               </h2>
-              <p className="lede">{featuredProject.summary} I designed and built it, from the pages to the launch.</p>
+              <p className="lede">{featuredProject.summary} I designed and built it.</p>
               <ol className="benefits">
                 {featuredProject.benefits.map((benefit, i) => (
-                  <li key={benefit.title}>
+                  <li key={benefit}>
                     <span>{String(i + 1).padStart(2, "0")}</span>
-                    <div>
-                      <strong>{benefit.title}</strong>
-                      <p>{benefit.text}</p>
-                    </div>
+                    <strong>{benefit}</strong>
                   </li>
                 ))}
               </ol>
@@ -723,10 +723,7 @@ function HomePage({ selection, setSelection, onZoom }) {
             <h2 id="work-title" className="display-md">
               Demo sites for <em>local businesses.</em>
             </h2>
-            <p>
-              Concepts I designed and built to show what a site for your type of business could look like. They
-              are not client projects, and each one is live to click through.
-            </p>
+            <p>Concepts I built to show what your site could look like. Not client projects, but all live.</p>
           </div>
 
           <ol className="work-list">
@@ -772,14 +769,11 @@ function HomePage({ selection, setSelection, onZoom }) {
             <h2 id="pricing-title" className="display-md">
               One-time prices. <em>No surprises.</em>
             </h2>
-            <p>
-              Pick the size that fits today. You get a written quote before any work starts. Domain and hosting
-              fees are paid separately to the provider.
-            </p>
+            <p>Pick the size that fits today. Domain and hosting fees are paid separately.</p>
           </div>
 
           <div className="package-base reveal">
-            <p className="label">Every package includes</p>
+            <p className="label">Every package</p>
             <ul>
               {packageBase.map((item) => (
                 <li key={item}>{item}</li>
@@ -824,9 +818,7 @@ function HomePage({ selection, setSelection, onZoom }) {
             <div className="care-intro">
               <p className="label">Optional add-on</p>
               <h3 id="care-title">Website care</h3>
-              <p>
-                Your site works without it. Add a plan to any package if you'd rather hand off updates after launch.
-              </p>
+              <p>Optional. Add a plan to any package if you'd rather hand off updates.</p>
               <p className="care-terms">{careTerms}</p>
             </div>
             {carePlans.map((plan) => {
@@ -851,30 +843,35 @@ function HomePage({ selection, setSelection, onZoom }) {
             })}
           </div>
 
-          <div className="pricing-extras">
-            <div className="extras-block reveal">
-              <h3>Booking, three ways</h3>
-              <ul className="booking-levels">
-                {bookingLevels.map((level) => (
-                  <li key={level.name}>
-                    <div>
-                      <strong>{level.name}</strong>
-                      <span>{level.text}</span>
-                    </div>
-                    <em>{level.where}</em>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="extras-block reveal">
-              <h3>Quoted separately</h3>
-              <p>Not part of any fixed package. I price these after we talk.</p>
-              <ul className="dash-list">
-                {quotedSeparately.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
+          <div className="extras reveal">
+            <p className="extras-note">{quotedSeparatelyNote}</p>
+            <details className="extras-details">
+              <summary>Booking options and extra costs</summary>
+              <div className="pricing-extras">
+                <div className="extras-block">
+                  <h3>Booking, three ways</h3>
+                  <ul className="booking-levels">
+                    {bookingLevels.map((level) => (
+                      <li key={level.name}>
+                        <div>
+                          <strong>{level.name}</strong>
+                          <span>{level.text}</span>
+                        </div>
+                        <em>{level.where}</em>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="extras-block">
+                  <h3>Quoted separately</h3>
+                  <ul className="dash-list">
+                    {quotedSeparately.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </details>
           </div>
 
           <PaymentBlock />
@@ -890,7 +887,7 @@ function HomePage({ selection, setSelection, onZoom }) {
             <h2 id="process-title" className="display-md">
               Four steps, <em>all in writing.</em>
             </h2>
-            <p>No calls needed. You answer when it suits you, and every decision stays in one thread.</p>
+            <p>No calls needed. Everything stays in one message thread.</p>
           </div>
           <ol className="steps">
             {steps.map((step, index) => (
@@ -915,20 +912,9 @@ function HomePage({ selection, setSelection, onZoom }) {
               Hi, I'm Amin. <em>You'll work with me directly.</em>
             </h2>
             <p className="lede">
-              I live in New York and build websites for small businesses here. I'm not an agency. The person you
-              message is the person who designs your site and writes the code.
+              I live in New York and build websites for small businesses here. I'm not an agency: the person you
+              message is the one who designs your site and writes the code.
             </p>
-            <ul className="about-points">
-              <li>
-                <strong>Straight answers.</strong> You ask a question, I answer it. No account managers in between.
-              </li>
-              <li>
-                <strong>Plain English.</strong> I explain what your site needs and what it doesn't.
-              </li>
-              <li>
-                <strong>Clear scope.</strong> You know the price and what's included before I start.
-              </li>
-            </ul>
           </div>
         </div>
       </section>
@@ -948,6 +934,15 @@ function HomePage({ selection, setSelection, onZoom }) {
                 <p>{item.answer}</p>
               </details>
             ))}
+            <details className="more-faqs">
+              <summary>More questions</summary>
+              {moreFaqs.map((item) => (
+                <div className="more-faq" key={item.question}>
+                  <h3>{item.question}</h3>
+                  <p>{item.answer}</p>
+                </div>
+              ))}
+            </details>
           </div>
         </div>
       </section>
@@ -1015,28 +1010,13 @@ function CasePage({ onZoom }) {
 
       <section className="section case-section" aria-labelledby="case-task">
         <div className="container case-row reveal">
-          <SectionIndex number="01" label="The task" />
+          <SectionIndex number="01" label="Task and role" />
           <div>
             <h2 id="case-task" className="display-sm">
-              Explain four programs to busy parents, and be ready for launch day.
+              Four programs, explained for busy parents.
             </h2>
-            {caseStudy.task.map((text) => (
-              <p key={text}>{text}</p>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section case-section" aria-labelledby="case-role">
-        <div className="container case-row reveal">
-          <SectionIndex number="02" label="My role" />
-          <div>
-            <h2 id="case-role" className="display-sm">
-              Design, development, integrations, testing, and deployment.
-            </h2>
-            {caseStudy.role.map((text) => (
-              <p key={text}>{text}</p>
-            ))}
+            <p>{caseStudy.task}</p>
+            <p>{caseStudy.role}</p>
           </div>
         </div>
       </section>
@@ -1044,7 +1024,7 @@ function CasePage({ onZoom }) {
       <section className="section case-section" aria-labelledby="case-features">
         <div className="container">
           <div className="case-row reveal">
-            <SectionIndex number="03" label="Key features" />
+            <SectionIndex number="02" label="Screens" />
             <h2 id="case-features" className="display-sm">
               What parents see.
             </h2>
@@ -1069,48 +1049,38 @@ function CasePage({ onZoom }) {
                 </div>
               </div>
               <figcaption>
-                <h3>Built for phones first</h3>
-                <p>Most parents check on a phone. Text, buttons, and the menu are sized for one-handed use.</p>
+                <h3>Built for phones</h3>
+                <p>Readable text and a simple menu.</p>
               </figcaption>
             </figure>
           </div>
         </div>
       </section>
 
-      <section className="section case-section" aria-labelledby="case-work">
-        <div className="container case-row reveal">
-          <SectionIndex number="04" label="Technical details" />
-          <div>
-            <h2 id="case-work" className="display-sm">
-              The work behind the pages.
-            </h2>
-            <div className="work-groups">
-              {caseStudy.work.map((group) => (
-                <div key={group.title}>
-                  <h3>{group.title}</h3>
-                  <ul className="dash-list">
-                    {group.items.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="section case-section" aria-labelledby="case-result">
         <div className="container case-row reveal">
-          <SectionIndex number="05" label="Where it stands" />
+          <SectionIndex number="03" label="Status" />
           <div>
             <h2 id="case-result" className="display-sm">
-              {p.status}
+              Where it stands
             </h2>
-            {caseStudy.result.map((text) => (
-              <p key={text}>{text}</p>
-            ))}
+            <p>{caseStudy.result}</p>
             <p className="note">{caseStudy.pricingNote}</p>
+            <details className="tech-details">
+              <summary>Technical details</summary>
+              <div className="work-groups">
+                {caseStudy.work.map((group) => (
+                  <div key={group.title}>
+                    <h3>{group.title}</h3>
+                    <ul className="dash-list">
+                      {group.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </details>
           </div>
         </div>
       </section>
@@ -1120,7 +1090,7 @@ function CasePage({ onZoom }) {
           <h2 id="case-cta-title" className="display-lg">
             Need something <em>like this?</em>
           </h2>
-          <p className="lede">Tell me what your business needs. I'll reply with what it would take and a written quote.</p>
+          <p className="lede">Tell me what you need, and I'll reply with a quote.</p>
           <div className="button-row">
             <a className="btn btn-primary" href={`/?interest=${encodeURIComponent(p.id)}#contact`}>
               Tell me about your project <ArrowIcon />
